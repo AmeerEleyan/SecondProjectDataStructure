@@ -34,6 +34,7 @@ public class Interfaces extends Application {
         stage.setTitle("Shares");
         stage.setResizable(false);
         Utilities.readPurchaseDataFromAFile("dailyPrice.txt", Utilities.dailyPriceLinkedList);
+        Utilities.readPurchaseDataFromAFile("shares.txt", Utilities.buyingLinkedQueues);
         stage.setScene(new Scene(allComponents()));
         stage.show();
     }
@@ -113,6 +114,18 @@ public class Interfaces extends Application {
         dateColumn.setSortable(false);
         dateColumn.setResizable(false);
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("stringDate"));
+
+        if (!Utilities.buyingLinkedStacks.isEmpty()) {
+            buyingTableView.getItems().clear(); // clear data from table
+            Node<Buying> curr = Utilities.buyingLinkedQueues.getFirst();
+            int count = 0;
+            while (curr != null) {
+                buyingTableView.getItems().add(curr.getData()); // upload data to the table
+                count++;
+                curr = curr.getNext();
+            }
+            txtTotalShares.setText(count + "");
+        }
 
         buyingTableView.getColumns().addAll(sharesColumn, priceColumn, companyColumn, dateColumn);
         return buyingTableView;
@@ -235,7 +248,7 @@ public class Interfaces extends Application {
             btBuy.setStyle(styleBt);
         });
         btBuy.setOnAction(e -> {
-            GUI.Buying.sell(Utilities.dailyPriceLinkedList);
+            GUI.Buying.Buy(Utilities.dailyPriceLinkedList);
         });
 
         btReport = new Button("Report");

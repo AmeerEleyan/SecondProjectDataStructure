@@ -1,7 +1,10 @@
+/**
+ * @autor: Amir Eleyan
+ * ID: 1191076
+ * At: 10/4/2021  3:52 AM
+ */
 package Shares;
 
-import GUI.Interfaces;
-import javafx.scene.control.TextField;
 import lists.LinkedList;
 import lists.LinkedQueues;
 import lists.LinkedStacks;

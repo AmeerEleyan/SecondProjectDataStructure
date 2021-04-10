@@ -1,3 +1,8 @@
+/**
+ * @autor: Amir Eleyan
+ * ID: 1191076
+ * At: 10/4/2021  6:37 PM
+ */
 package GUI;
 
 import Shares.DailyPrice;
@@ -25,7 +30,7 @@ public class Buying {
     private static Label lblShares, lblCompany, lblDate;
     private static Button btBuy, btClose;
 
-    public static void sell(LinkedList<DailyPrice> linkedList) {
+    public static void Buy(LinkedList<DailyPrice> linkedList) {
 
         // style for labels
         String styleLbl = "-fx-text-fill:#000000; -fx-background-color:#ffffff;-fx-font-weight: BOLd; -fx-font-size:15; ";
