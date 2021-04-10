@@ -1,5 +1,7 @@
 package Shares;
 
+import GUI.Interfaces;
+import javafx.scene.control.TextField;
 import lists.LinkedList;
 import lists.LinkedQueues;
 import lists.LinkedStacks;
@@ -13,9 +15,10 @@ public final class Utilities {
 
     public static final LinkedStacks<Buying> buyingLinkedStacks = new LinkedStacks<>();
     public static final LinkedQueues<Buying> buyingLinkedQueues = new LinkedQueues<>();
-    public static LinkedStacks<Buying> tempBuyingStacks ;
+    public static LinkedStacks<Buying> tempBuyingStacks;
     public static LinkedQueues<Buying> tempBuyingQueue;
     public static final LinkedList<DailyPrice> dailyPriceLinkedList = new LinkedList<>();
+
     // to prevent create obj from this class
     private Utilities() {
     }
@@ -30,7 +33,8 @@ public final class Utilities {
         try {
             Scanner input = new Scanner(file); // instance of scanner for read data from file
             if (file.length() == 0) {
-                // Massage.displayMassage("Warning", "  There are No records in file " + fileName + "  "); // no data in file
+                // no data in file
+                GUI.Message.displayMassage("Warning", "  There are No records in file " + fileName + "  ");
             } else {
                 int line = 1; // represent line on the file to display in which line has problem If that happens
 
@@ -48,8 +52,8 @@ public final class Utilities {
 
                     } catch (Exception ex) {
                         // the record in the file has a problem
-                        // e.g. he does not have a grade or The data arrangement is not in the right place
-                        //    Massage.displayMassage("Warning", " Error reading in student info in line # " + line + " in file " + fileName + "  ");
+                        // e.g. he does not have a company or The data arrangement is not in the right place
+                        GUI.Message.displayMassage("Warning", " Invalid format in line # " + line + " in file " + fileName + "  ");
                     }
                 }
                 input.close(); // prevent(close) scanner to read data
@@ -57,7 +61,7 @@ public final class Utilities {
 
         } catch (FileNotFoundException e) {
             // The specific file for reading data does not exist
-            //  Massage.displayMassage("Error", " The system can NOT find the file " + fileName + "  ");
+            GUI.Message.displayMassage("Error", " The system can NOT find the file " + fileName + "  ");
         }
     }
 
@@ -71,8 +75,21 @@ public final class Utilities {
     /**
      * Return current data as string
      */
-    private static String buyingDate(Date buyingDate) {
+    public static String buyingDate(Date buyingDate) {
         return buyingDate.getDate() + "/" + (buyingDate.getMonth() + 1) + "/" + (buyingDate.getYear() + 1900);
+    }
+
+    /**
+     * To check the value of the entered numberOfShares if it is correct or not
+     */
+    public static boolean isNumber(String txt) {
+
+        /* To check the entered number of shares, that it consists of
+           only digits
+         */
+        if (txt.matches("\\d"))
+            if (Integer.parseInt(txt) > 0) return true;
+        return false;
     }
 
     public static void main(String[] arg) {

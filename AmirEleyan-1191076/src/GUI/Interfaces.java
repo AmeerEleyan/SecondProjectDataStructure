@@ -21,6 +21,13 @@ public class Interfaces extends Application {
     private ComboBox<String> accountingPrinciple;
     private Button btBuy, btReport;
 
+    // Style for buttons
+    String styleBt = "-fx-background-color: #ffffff;" + "-fx-font-size:18;-fx-border-width: 1.5; -fx-border-color: #000000;" +
+            "-fx-text-fill: #000000; -fx-font-family: 'Times New Roman'; ";
+
+    // Style for hover buttons
+    String styleHoverBt = "-fx-background-color: #000000; " + "-fx-font-size:18;-fx-border-width: 1.5; -fx-border-color: #000000;" +
+            "-fx-text-fill: #ffffff; -fx-font-family: 'Times New Roman'; ";
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -200,7 +207,7 @@ public class Interfaces extends Application {
 
     public VBox functions() {
         VBox vBox = new VBox(20);
-        vBox.setPadding(new Insets(5, 5, 5, 0));
+        vBox.setPadding(new Insets(5, 5, 5, 5));
         vBox.setAlignment(Pos.TOP_CENTER);
         vBox.setStyle("-fx-background-color: #ffffff");
 
@@ -211,18 +218,37 @@ public class Interfaces extends Application {
         accountingPrinciple.setPadding(new Insets(0, 0, 5, 0));
         accountingPrinciple.setMinWidth(220);
         accountingPrinciple.setMinHeight(45);
-        accountingPrinciple.setStyle("-fx-background-color: #ffffff; -fx-border-width: 2px2px2px2px;" +
+        accountingPrinciple.setStyle("-fx-background-color: #ffffff; -fx-border-width: 0px0px2px0px;" +
                 " -fx-border-color: #000000;-fx-font-weight: BOLd;-fx-font-size:16;");
 
         vBox.setMargin(accountingPrinciple, new Insets(45, 0, 0, 0));
 
         btBuy = new Button("Buy Shares");
-        btBuy.setMinWidth(230);
+        btBuy.setMinWidth(275);
         btBuy.setMinHeight(40);
+        btBuy.setStyle(styleBt);
+        btBuy.setOnMouseEntered(e -> {
+            btBuy.setStyle(styleHoverBt);
+        });
+        // To change the design of the button when the mouse arrow is removed from it
+        btBuy.setOnMouseExited(e -> {
+            btBuy.setStyle(styleBt);
+        });
+        btBuy.setOnAction(e -> {
+            GUI.Buying.sell(Utilities.dailyPriceLinkedList);
+        });
 
         btReport = new Button("Report");
-        btReport.setMinWidth(230);
+        btReport.setMinWidth(275);
         btReport.setMinHeight(40);
+        btReport.setStyle(styleBt);
+        btReport.setOnMouseEntered(e -> {
+            btReport.setStyle(styleHoverBt);
+        });
+        // To change the design of the button when the mouse arrow is removed from it
+        btReport.setOnMouseExited(e -> {
+            btReport.setStyle(styleBt);
+        });
 
         vBox.getChildren().addAll(accountingPrinciple, btBuy, btReport);
 
