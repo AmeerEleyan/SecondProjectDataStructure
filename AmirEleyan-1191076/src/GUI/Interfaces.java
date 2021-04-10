@@ -18,8 +18,7 @@ import lists.Node;
 public class Interfaces extends Application {
     private TextField txtTotalShares, txtTotalCompany;
     private Label lblTotalShares, lblTotalCompany;
-    private ComboBox<String> accountingPrinciple;
-    private Button btBuy, btReport;
+    private Button btBuy, btSell, btReport;
 
     // Style for buttons
     String styleBt = "-fx-background-color: #ffffff;" + "-fx-font-size:18;-fx-border-width: 1.5; -fx-border-color: #000000;" +
@@ -34,7 +33,7 @@ public class Interfaces extends Application {
         stage.setTitle("Shares");
         stage.setResizable(false);
         Utilities.readPurchaseDataFromAFile("dailyPrice.txt", Utilities.dailyPriceLinkedList);
-        Utilities.readPurchaseDataFromAFile("shares.txt", Utilities.buyingLinkedQueues);
+        Utilities.readPurchaseDataFromAFile("shares.txt", new Object());
         stage.setScene(new Scene(allComponents()));
         stage.show();
     }
@@ -115,7 +114,7 @@ public class Interfaces extends Application {
         dateColumn.setResizable(false);
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("stringDate"));
 
-        if (!Utilities.buyingLinkedStacks.isEmpty()) {
+        if (!Utilities.buyingLinkedQueues.isEmpty()) {
             buyingTableView.getItems().clear(); // clear data from table
             Node<Buying> curr = Utilities.buyingLinkedQueues.getFirst();
             int count = 0;
@@ -224,17 +223,6 @@ public class Interfaces extends Application {
         vBox.setAlignment(Pos.TOP_CENTER);
         vBox.setStyle("-fx-background-color: #ffffff");
 
-        accountingPrinciple = new ComboBox<>();
-        accountingPrinciple.getItems().addAll("Sell old shares first", "Sell new shares first");
-        accountingPrinciple.setPromptText("Select Accounting Principle: ");
-        accountingPrinciple.setEditable(false);
-        accountingPrinciple.setPadding(new Insets(0, 0, 5, 0));
-        accountingPrinciple.setMinWidth(220);
-        accountingPrinciple.setMinHeight(45);
-        accountingPrinciple.setStyle("-fx-background-color: #ffffff; -fx-border-width: 0px0px2px0px;" +
-                " -fx-border-color: #000000;-fx-font-weight: BOLd;-fx-font-size:16;");
-
-        vBox.setMargin(accountingPrinciple, new Insets(45, 0, 0, 0));
 
         btBuy = new Button("Buy Shares");
         btBuy.setMinWidth(275);
@@ -258,12 +246,27 @@ public class Interfaces extends Application {
         btReport.setOnMouseEntered(e -> {
             btReport.setStyle(styleHoverBt);
         });
-        // To change the design of the button when the mouse arrow is removed from it
         btReport.setOnMouseExited(e -> {
             btReport.setStyle(styleBt);
         });
+        btReport.setOnAction(e -> Details.viewDetails("Hello how arre you ammer"));
 
-        vBox.getChildren().addAll(accountingPrinciple, btBuy, btReport);
+        btSell = new Button("Sell Shares");
+        btSell.setMinWidth(275);
+        btSell.setMinHeight(40);
+        btSell.setStyle(styleBt);
+        btSell.setOnMouseEntered(e -> {
+            btSell.setStyle(styleHoverBt);
+        });
+        btSell.setOnMouseExited(e -> {
+            btSell.setStyle(styleBt);
+        });
+        btSell.setOnAction(e -> GUI.Selling.Sell(Utilities.dailyPriceLinkedList));
+
+
+        vBox.setMargin(btBuy, new Insets(45, 0, 0, 0));
+
+        vBox.getChildren().addAll(btBuy, btSell, btReport);
 
 
         return vBox;

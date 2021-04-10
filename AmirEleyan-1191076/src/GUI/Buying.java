@@ -72,13 +72,13 @@ public class Buying {
         chxCompanyName.setPadding(new Insets(0, 0, 5, 0));
         chxCompanyName.setMinWidth(180);
         chxCompanyName.setMinHeight(0);
-        chxCompanyName.setStyle("-fx-background-color: #ffffff; -fx-border-width: 0px0px1px0px; -fx-border-color:#000000;" +
-                "-fx-font-weight: BOLd;-fx-font-size:14;");
+        chxCompanyName.setStyle("-fx-background-color: #ffffff; -fx-border-width: 0px0px2px0px; -fx-border-color:#000000;" +
+                "-fx-font-weight: BOLd;-fx-font-size:15;");
 
         // text filed to get the value of the numberOfShares
         txtNumberOfShares = new TextField();
         txtNumberOfShares.setPromptText("Enter # shares");
-        txtNumberOfShares.setMaxWidth(chxCompanyName.getMinWidth());
+        txtNumberOfShares.setMaxWidth(chxCompanyName.getMinWidth()+15);
         txtNumberOfShares.setStyle(styleTxt);
 
         // set values of the comboBox
@@ -94,15 +94,15 @@ public class Buying {
 
         txtDate = new TextField();
         txtDate.setEditable(false);
-        txtDate.setMaxWidth(chxCompanyName.getMinWidth());
+        txtDate.setMaxWidth(chxCompanyName.getMinWidth()+15);
         txtDate.setStyle(styleTxt);
         txtDate.setText(Utilities.buyingDate(new Date()));
 
-        pane.add(lblShares, 0, 0);
-        pane.add(txtNumberOfShares, 1, 0);
+        pane.add(lblCompany, 0, 0);
+        pane.add(chxCompanyName, 1, 0);
 
-        pane.add(lblCompany, 0, 1);
-        pane.add(chxCompanyName, 1, 1);
+        pane.add(lblShares, 0, 1);
+        pane.add(txtNumberOfShares, 1, 1);
 
         pane.add(lblDate, 0, 2);
         pane.add(txtDate, 1, 2);
@@ -124,14 +124,14 @@ public class Buying {
 
 
         // HBox for button
-        HBox hBox = new HBox(50);
+        HBox hBox = new HBox(60);
         hBox.setAlignment(Pos.CENTER);
         hBox.setPadding(new Insets(5, 5, 5, 5));
         hBox.setStyle("-fx-background-color: #ffffff;");
         hBox.getChildren().addAll(btBuy, btClose);
 
         // VBox
-        VBox vBox = new VBox(25);
+        VBox vBox = new VBox(35);
         vBox.setAlignment(Pos.CENTER);
         vBox.setPadding(new Insets(5, 5, 5, 5));
         vBox.setStyle("-fx-background-color: #ffffff;");

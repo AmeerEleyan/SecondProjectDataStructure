@@ -24,8 +24,9 @@ import lists.Node;
 public class Selling {
     private static TextField txtNumberOfShares;
     private static ComboBox<String> chxCompanyName;
-    private static Label lblShares, lblCompany;
+    private static Label lblShares, lblCompany, lblAccountingPrinciple;
     private static Button btSell, btClose;
+    private static ComboBox<String> accountingPrinciple;
 
     public static void Sell(LinkedList<DailyPrice> linkedList) {
 
@@ -46,7 +47,7 @@ public class Selling {
 
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle("Buying shares");
+        window.setTitle("Selling Shares");
 
         // gridPane for arrange labels and testFields
         GridPane pane = new GridPane();
@@ -56,6 +57,18 @@ public class Selling {
         pane.setHgap(8);
         pane.setPadding(new Insets(5, 5, 5, 5));
 
+
+        lblAccountingPrinciple  =new Label("Accounting Principle:");
+        lblAccountingPrinciple.setStyle(styleLbl);
+
+
+        accountingPrinciple = new ComboBox<>();
+        accountingPrinciple.getItems().addAll("Sell old shares first", "Sell new shares first");
+        accountingPrinciple.setPromptText("Select Accounting Principle: ");
+        accountingPrinciple.setEditable(false);
+        accountingPrinciple.setStyle("-fx-background-color: #ffffff; -fx-border-width: 0px0px2px0px;" +
+                " -fx-border-color: #000000;-fx-font-weight: BOLd;-fx-font-size:15;");
+
         lblShares = new Label("\nNumber of Shares:   ");
         lblShares.setStyle(styleLbl);
 
@@ -63,19 +76,18 @@ public class Selling {
         lblCompany = new Label("Company Name:");
         lblCompany.setStyle(styleLbl);
 
+
         chxCompanyName = new ComboBox<>();
         chxCompanyName.setPromptText("\nSelect the company:");
         chxCompanyName.setEditable(false);
-        chxCompanyName.setPadding(new Insets(0, 0, 5, 0));
-        chxCompanyName.setMinWidth(180);
-        chxCompanyName.setMinHeight(0);
-        chxCompanyName.setStyle("-fx-background-color: #ffffff; -fx-border-width: 0px0px1px0px; -fx-border-color:#000000;" +
-                "-fx-font-weight: BOLd;-fx-font-size:14;");
+        chxCompanyName.setMinWidth(250);
+        chxCompanyName.setStyle("-fx-background-color: #ffffff; -fx-border-width: 0px0px2px0px; -fx-border-color:#000000;" +
+                "-fx-font-weight: BOLd;-fx-font-size:15;");
 
         // text filed to get the value of the numberOfShares
         txtNumberOfShares = new TextField();
         txtNumberOfShares.setPromptText("Enter # shares");
-        txtNumberOfShares.setMaxWidth(chxCompanyName.getMinWidth());
+        txtNumberOfShares.setMinWidth(200);
         txtNumberOfShares.setStyle(styleTxt);
 
         // set values of the comboBox
@@ -85,13 +97,16 @@ public class Selling {
             current = current.getNext();
 
         }
-        pane.add(lblShares, 0, 0);
-        pane.add(txtNumberOfShares, 1, 0);
+        pane.add(lblAccountingPrinciple,0,0);
+        pane.add(accountingPrinciple,1,0);
 
-        pane.add(lblCompany, 0, 1);
-        pane.add(chxCompanyName, 1, 1);
+        pane.add(lblShares, 0, 1);
+        pane.add(txtNumberOfShares, 1, 1);
 
-        btSell = new Button("Buy");
+        pane.add(lblCompany, 0, 2);
+        pane.add(chxCompanyName, 1, 2);
+
+        btSell = new Button("Sell");
         btSell.setMinWidth(80);
         btSell.setStyle(styleBt);
         btSell.setOnMouseEntered(e -> btSell.setStyle(styleHoverBt));
@@ -107,14 +122,14 @@ public class Selling {
 
 
         // HBox for button
-        HBox hBox = new HBox(50);
+        HBox hBox = new HBox(60);
         hBox.setAlignment(Pos.CENTER);
         hBox.setPadding(new Insets(5, 5, 5, 5));
         hBox.setStyle("-fx-background-color: #ffffff;");
         hBox.getChildren().addAll(btSell, btClose);
 
         // VBox
-        VBox vBox = new VBox(25);
+        VBox vBox = new VBox(35);
         vBox.setAlignment(Pos.CENTER);
         vBox.setPadding(new Insets(5, 5, 5, 5));
         vBox.setStyle("-fx-background-color: #ffffff;");
