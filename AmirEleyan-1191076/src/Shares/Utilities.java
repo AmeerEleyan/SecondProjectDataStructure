@@ -11,12 +11,11 @@ import java.util.Scanner;
 
 public final class Utilities {
 
-    private static final LinkedStacks<Buying> buyingLinkedStacks = new LinkedStacks<>();
-    private static final LinkedQueues<Buying> buyingLinkedQueues = new LinkedQueues<>();
-    private static final LinkedList<DailyPrice> dailyPriceLinkedList = new LinkedList<>();
-    private LinkedStacks<Buying> tempBuyingStacks;
-    private LinkedQueues<Buying> tempBuyingQueue;
-
+    public static final LinkedStacks<Buying> buyingLinkedStacks = new LinkedStacks<>();
+    public static final LinkedQueues<Buying> buyingLinkedQueues = new LinkedQueues<>();
+    public static LinkedStacks<Buying> tempBuyingStacks ;
+    public static LinkedQueues<Buying> tempBuyingQueue;
+    public static final LinkedList<DailyPrice> dailyPriceLinkedList = new LinkedList<>();
     // to prevent create obj from this class
     private Utilities() {
     }
@@ -86,6 +85,5 @@ public final class Utilities {
         Date date = new Date();
         System.out.println(Utilities.buyingDate(new Date()));
     }
-
 
 }

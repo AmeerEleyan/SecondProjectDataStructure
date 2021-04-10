@@ -14,6 +14,7 @@ public class Buying implements Comparable<Buying> {
     private float sharesBuyingPrice;
     private String companyName;
     private int date, month, year;
+    private String stringDate;
 
     // No arg constructor
     public Buying() {
@@ -28,6 +29,7 @@ public class Buying implements Comparable<Buying> {
         this.date = date;
         this.month = month;
         this.year = year;
+        this.stringDate = this.date + "/" + this.month + "/" + this.year;
     }
 
     public Buying(String dataLine) {
@@ -58,6 +60,8 @@ public class Buying implements Comparable<Buying> {
 
         // year
         this.year = Integer.parseInt(dataLine.substring(q + 1).trim());
+
+        this.stringDate = this.date + "/" + this.month + "/" + this.year;
 
     }
 
@@ -113,6 +117,11 @@ public class Buying implements Comparable<Buying> {
     // set a new year
     public void setYear(int year) {
         this.year = year;
+    }
+
+    // return tha date as a string
+    public String getStringDate() {
+        return this.stringDate;
     }
 
     /**
