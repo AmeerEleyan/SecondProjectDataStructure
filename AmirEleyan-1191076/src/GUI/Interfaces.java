@@ -13,12 +13,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import lists.LinkedQueues;
 import lists.Node;
 
 public class Interfaces extends Application {
-    private TextField txtTotalShares, txtTotalCompany;
+    private static TextField txtTotalShares, txtTotalCompany;
     private Label lblTotalShares, lblTotalCompany;
     private Button btBuy, btSell, btReport;
+    private static TableView<Buying> buyingTableView;
+
 
     // Style for buttons
     String styleBt = "-fx-background-color: #ffffff;" + "-fx-font-size:18;-fx-border-width: 1.5; -fx-border-color: #000000;" +
@@ -35,6 +38,7 @@ public class Interfaces extends Application {
         Utilities.readPurchaseDataFromAFile("dailyPrice.txt", Utilities.dailyPriceLinkedList);
         Utilities.readPurchaseDataFromAFile("shares.txt", new Object());
         stage.setScene(new Scene(allComponents()));
+        uploadListToTable(Utilities.buyingLinkedQueues);
         stage.show();
     }
 
@@ -81,9 +85,9 @@ public class Interfaces extends Application {
         return dailyPriceTable;
     }
 
-    public TableView<Buying> buyingTable() {
+    public static TableView<Buying> buyingTable() {
 
-        TableView<Buying> buyingTableView = new TableView<>();
+        buyingTableView = new TableView<>();
         buyingTableView.setEditable(false);
         buyingTableView.setMinWidth(760);
         buyingTableView.setMinHeight(420);
@@ -114,20 +118,28 @@ public class Interfaces extends Application {
         dateColumn.setResizable(false);
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("stringDate"));
 
-        if (!Utilities.buyingLinkedQueues.isEmpty()) {
-            buyingTableView.getItems().clear(); // clear data from table
-            Node<Buying> curr = Utilities.buyingLinkedQueues.getFirst();
-            int count = 0;
-            while (curr != null) {
-                buyingTableView.getItems().add(curr.getData()); // upload data to the table
-                count++;
-                curr = curr.getNext();
-            }
-            txtTotalShares.setText(count + "");
-        }
 
         buyingTableView.getColumns().addAll(sharesColumn, priceColumn, companyColumn, dateColumn);
         return buyingTableView;
+    }
+
+    /**
+     * to view data in table view
+     */
+    public static void uploadListToTable(LinkedQueues<Buying> list) {
+        if (!list.isEmpty()) {
+            buyingTableView.getItems().clear(); // clear data from table
+            Node<Buying> curr = list.getFirst();
+            int count = 0;
+            while (curr != null) {
+                buyingTableView.getItems().add(curr.getData()); // upload data to the table
+                curr = curr.getNext();
+                count++;
+            }
+            txtTotalShares.setText(count + "");
+        } else {
+            Message.displayMassage("Data", " There are no shares to display ");
+        }
     }
 
     public VBox vBoxDailyPrice() {
@@ -236,7 +248,7 @@ public class Interfaces extends Application {
             btBuy.setStyle(styleBt);
         });
         btBuy.setOnAction(e -> {
-            GUI.Buying.Buy(Utilities.dailyPriceLinkedList);
+            BuyingGUI.Buy(Utilities.dailyPriceLinkedList);
         });
 
         btReport = new Button("Report");

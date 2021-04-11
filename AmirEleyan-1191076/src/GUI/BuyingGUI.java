@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import Shares.Buying;
 import Shares.DailyPrice;
 import Shares.Utilities;
 import javafx.geometry.Insets;
@@ -24,7 +25,7 @@ import lists.Node;
 
 import java.util.Date;
 
-public class Buying {
+public class BuyingGUI {
     private static TextField txtNumberOfShares, txtDate;
     private static ComboBox<String> chxCompanyName;
     private static Label lblShares, lblCompany, lblDate;
@@ -78,7 +79,7 @@ public class Buying {
         // text filed to get the value of the numberOfShares
         txtNumberOfShares = new TextField();
         txtNumberOfShares.setPromptText("Enter # shares");
-        txtNumberOfShares.setMaxWidth(chxCompanyName.getMinWidth()+15);
+        txtNumberOfShares.setMaxWidth(chxCompanyName.getMinWidth() + 15);
         txtNumberOfShares.setStyle(styleTxt);
 
         // set values of the comboBox
@@ -94,7 +95,7 @@ public class Buying {
 
         txtDate = new TextField();
         txtDate.setEditable(false);
-        txtDate.setMaxWidth(chxCompanyName.getMinWidth()+15);
+        txtDate.setMaxWidth(chxCompanyName.getMinWidth() + 15);
         txtDate.setStyle(styleTxt);
         txtDate.setText(Utilities.buyingDate(new Date()));
 
@@ -107,13 +108,6 @@ public class Buying {
         pane.add(lblDate, 0, 2);
         pane.add(txtDate, 1, 2);
 
-
-        btBuy = new Button("Buy");
-        btBuy.setMinWidth(80);
-        btBuy.setStyle(styleBt);
-        btBuy.setOnMouseEntered(e -> btBuy.setStyle(styleHoverBt));
-        btBuy.setOnMouseExited(e -> btBuy.setStyle(styleBt));
-
         // button for close the window
         btClose = new Button("Close");
         btClose.setMinWidth(80);
@@ -121,6 +115,47 @@ public class Buying {
         btClose.setOnMouseEntered(e -> btClose.setStyle(styleHoverBt));
         btClose.setOnMouseExited(e -> btClose.setStyle(styleBt));
         btClose.setOnAction(e -> window.close());
+
+        btBuy = new Button("Buy");
+        btBuy.setMinWidth(80);
+        btBuy.setStyle(styleBt);
+        btBuy.setOnMouseEntered(e -> btBuy.setStyle(styleHoverBt));
+        btBuy.setOnMouseExited(e -> btBuy.setStyle(styleBt));
+
+        btBuy.setOnAction(e -> {
+            if (chxCompanyName.getValue() == null) {
+                Message.displayMassage("Warning", " Please select the company ");
+            } else if (txtNumberOfShares.getText().trim().isEmpty()) {
+                Message.displayMassage("Warning", " Please enter the number of shares ");
+            } else if (!Utilities.isNumber(txtNumberOfShares.getText().trim())) {
+                Message.displayMassage("Error", " The number of shares is invalid ");
+                txtNumberOfShares.clear();
+            } else {
+                DailyPrice searchCompany = Utilities.dailyPriceLinkedList
+                        .search(new DailyPrice(chxCompanyName.getValue().trim(), 0));
+
+                Date currentDate = new Date();
+                Buying buying = new Buying();
+
+                buying.setNumberOfShares(Integer.parseInt(txtNumberOfShares.getText().trim()));
+                buying.setSharesBuyingPrice(searchCompany.getSharesSalePrice());
+                buying.setCompanyName(searchCompany.getCompanyName());
+                buying.setDate(currentDate.getDate());
+                buying.setMonth(currentDate.getMonth() + 1);
+                buying.setYear(currentDate.getYear() + 1900);
+                buying.setStringDate(Utilities.buyingDate(currentDate));
+
+                Utilities.buyingLinkedQueues.enqueue(buying);
+                Utilities.buyingLinkedStacks.push(buying);
+
+                Interfaces.uploadListToTable(Utilities.buyingLinkedQueues);
+
+                Message.displayMassage("Success", (txtNumberOfShares.getText().trim() +
+                        " shares of " + chxCompanyName.getValue().trim() + " Company were purchased successfully "));
+                txtNumberOfShares.clear();
+            }
+
+        });
 
 
         // HBox for button

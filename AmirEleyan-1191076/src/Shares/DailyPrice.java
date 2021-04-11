@@ -32,6 +32,7 @@ public class DailyPrice implements Comparable<DailyPrice> {
         this.sharesSalePrice = Float.parseFloat(dataLine.substring(q + 1).trim());
     }
 
+
     /**
      * return company name
      */

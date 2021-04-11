@@ -114,6 +114,18 @@ public class LinkedQueues<T extends Comparable<T>> {
     }
 
     /**
+     * Fill this queue from stacks
+     */
+    public void fillFromStacks(Node<T> topNodeOfStacks) {
+        if (topNodeOfStacks == null) {
+            clear();
+        } else {
+            fillFromStacks(topNodeOfStacks.getNext());
+            enqueue(topNodeOfStacks.getData());
+        }
+    }
+
+    /**
      * Return the first element as a node
      */
     public Node<T> getFirst() {

@@ -32,6 +32,7 @@ public class Buying implements Comparable<Buying> {
         this.stringDate = this.date + "/" + this.month + "/" + this.year;
     }
 
+
     public Buying(String dataLine) {
 
         // Number of shares
@@ -62,7 +63,6 @@ public class Buying implements Comparable<Buying> {
         this.year = Integer.parseInt(dataLine.substring(q + 1).trim());
 
         this.stringDate = this.date + "/" + this.month + "/" + this.year;
-
     }
 
     public int getNumberOfShares() {
@@ -122,6 +122,11 @@ public class Buying implements Comparable<Buying> {
     // return tha date as a string
     public String getStringDate() {
         return this.stringDate;
+    }
+
+    // set a new string date
+    public void setStringDate(String stringDate){
+        this.stringDate = stringDate;
     }
 
     /**

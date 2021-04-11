@@ -21,6 +21,7 @@ public final class Utilities {
     public static LinkedStacks<Buying> tempBuyingStacks;
     public static LinkedQueues<Buying> tempBuyingQueue;
     public static final LinkedList<DailyPrice> dailyPriceLinkedList = new LinkedList<>();
+    public static final float totalCapital = 0;
 
     // to prevent create obj from this class
     private Utilities() {
@@ -90,8 +91,8 @@ public final class Utilities {
         /* To check the entered number of shares, that it consists of
            only digits
          */
-        if (txt.matches("\\d"))
-            if (Integer.parseInt(txt) > 0) return true;
+        if (txt.matches("\\d+") && Integer.parseInt(txt) > 0)
+            return true;
         return false;
     }
 

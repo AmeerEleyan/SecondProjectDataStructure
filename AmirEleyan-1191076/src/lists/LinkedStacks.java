@@ -109,6 +109,17 @@ public class LinkedStacks<T extends Comparable<T>> {
     }
 
     /**
+     * Fill this stacks from queue
+     */
+    public void fillFromQueue(Node<T> headQueue) {
+        this.clear();
+        while (headQueue != null) {
+            this.push(headQueue.getData());
+            headQueue = headQueue.getNext();
+        }
+    }
+
+    /**
      * return the top item as a node
      */
     public Node<T> getTopItem() {
