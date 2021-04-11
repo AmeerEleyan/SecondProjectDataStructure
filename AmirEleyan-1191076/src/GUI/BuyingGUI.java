@@ -140,10 +140,8 @@ public class BuyingGUI {
                 buying.setNumberOfShares(Integer.parseInt(txtNumberOfShares.getText().trim()));
                 buying.setSharesBuyingPrice(searchCompany.getSharesSalePrice());
                 buying.setCompanyName(searchCompany.getCompanyName());
-                buying.setDate(currentDate.getDate());
-                buying.setMonth(currentDate.getMonth() + 1);
-                buying.setYear(currentDate.getYear() + 1900);
-                buying.setStringDate(Utilities.buyingDate(currentDate));
+                buying.setStringDate(currentDate.getDate(),
+                        currentDate.getMonth() + 1, currentDate.getYear() + 1900);
 
                 Utilities.buyingLinkedQueues.enqueue(buying);
                 Utilities.buyingLinkedStacks.push(buying);

@@ -16,12 +16,12 @@ import java.util.Scanner;
 
 public final class Utilities {
 
-    public static final LinkedStacks<Buying> buyingLinkedStacks = new LinkedStacks<>();
-    public static final LinkedQueues<Buying> buyingLinkedQueues = new LinkedQueues<>();
+    public static LinkedStacks<Buying> buyingLinkedStacks = new LinkedStacks<>();
+    public static LinkedQueues<Buying> buyingLinkedQueues = new LinkedQueues<>();
     public static LinkedStacks<Buying> tempBuyingStacks;
     public static LinkedQueues<Buying> tempBuyingQueue;
-    public static final LinkedList<DailyPrice> dailyPriceLinkedList = new LinkedList<>();
-    public static final float totalCapital = 0;
+    public static LinkedList<DailyPrice> dailyPriceLinkedList = new LinkedList<>();
+    public static float totalCapital = 0;
 
     // to prevent create obj from this class
     private Utilities() {

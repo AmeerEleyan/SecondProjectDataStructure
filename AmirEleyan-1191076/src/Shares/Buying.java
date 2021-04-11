@@ -26,10 +26,7 @@ public class Buying implements Comparable<Buying> {
         this.numberOfShares = numberOfShares;
         this.sharesBuyingPrice = sharesBuyingPrice;
         this.companyName = companyName;
-        this.date = date;
-        this.month = month;
-        this.year = year;
-        this.stringDate = this.date + "/" + this.month + "/" + this.year;
+        this.setStringDate(date, month, year);
     }
 
 
@@ -62,7 +59,7 @@ public class Buying implements Comparable<Buying> {
         // year
         this.year = Integer.parseInt(dataLine.substring(q + 1).trim());
 
-        this.stringDate = this.date + "/" + this.month + "/" + this.year;
+        this.setStringDate(this.date, this.month, this.year);
     }
 
     public int getNumberOfShares() {
@@ -94,29 +91,15 @@ public class Buying implements Comparable<Buying> {
         return this.date;
     }
 
-    // set a new date
-    public void setDate(int date) {
-        this.date = date;
-    }
 
     // return the month
     public int getMonth() {
         return this.month;
     }
 
-    //  set a new month
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
     // return the year
     public int getYear() {
         return this.year;
-    }
-
-    // set a new year
-    public void setYear(int year) {
-        this.year = year;
     }
 
     // return tha date as a string
@@ -125,8 +108,11 @@ public class Buying implements Comparable<Buying> {
     }
 
     // set a new string date
-    public void setStringDate(String stringDate){
-        this.stringDate = stringDate;
+    public void setStringDate(int date, int month, int year) {
+        this.year = year;
+        this.month = month;
+        this.date = date;
+        this.stringDate = date + "/" + month + "/" + year;
     }
 
     /**

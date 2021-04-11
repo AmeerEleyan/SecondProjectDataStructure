@@ -261,7 +261,7 @@ public class Interfaces extends Application {
         btReport.setOnMouseExited(e -> {
             btReport.setStyle(styleBt);
         });
-        btReport.setOnAction(e -> Details.viewDetails("Hello how arre you ammer"));
+       // btReport.setOnAction(e -> Details.viewDetails("Hello how arre you ammer"));
 
         btSell = new Button("Sell Shares");
         btSell.setMinWidth(275);
@@ -273,7 +273,7 @@ public class Interfaces extends Application {
         btSell.setOnMouseExited(e -> {
             btSell.setStyle(styleBt);
         });
-        btSell.setOnAction(e -> GUI.Selling.Sell(Utilities.dailyPriceLinkedList));
+        btSell.setOnAction(e -> GUI.SellingGUI.Sell(Utilities.dailyPriceLinkedList));
 
 
         vBox.setMargin(btBuy, new Insets(45, 0, 0, 0));
