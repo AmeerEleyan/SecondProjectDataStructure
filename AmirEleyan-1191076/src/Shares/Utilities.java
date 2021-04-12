@@ -22,6 +22,7 @@ public final class Utilities {
     public static LinkedQueues<Buying> tempBuyingQueue;
     public static LinkedList<DailyPrice> dailyPriceLinkedList = new LinkedList<>();
     public static float totalCapital = 0;
+    public static String report ="";
 
     // to prevent create obj from this class
     private Utilities() {

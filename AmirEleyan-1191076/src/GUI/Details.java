@@ -47,12 +47,12 @@ public class Details {
         TextArea taDetails = new TextArea(string);
         taDetails.setWrapText(true);
         taDetails.setPrefColumnCount(15);
-        taDetails.setPrefHeight(160);
-        taDetails.setPrefWidth(450);
+        taDetails.setPrefHeight(300);
+        taDetails.setPrefWidth(600);
         taDetails.setEditable(false);
-        taDetails.setFont(new Font("Times New Roman", 16));
-        taDetails.setStyle("-fx-highlight-fill:blue;  -fx-highlight-text-fill: #ffffff;" +
-                "  -fx-text-fill: black; -fx-background-color: black;");
+        taDetails.setStyle("-fx-font-family: 'Times New Roman';-fx-font-weight:" +
+                " BOLd;-fx-text-fill: #000000; -fx-background-color: #ffffff;" +
+                "-fx-border-color:#000000;" + "-fx-border-width:1.5;-fx-font-size:17;");
 
         vBox.getChildren().addAll(taDetails, btClose);
 

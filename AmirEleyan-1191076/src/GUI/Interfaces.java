@@ -150,9 +150,7 @@ public class Interfaces extends Application {
 
         Label lblDailyPrice = new Label("Daily Price");
         lblDailyPrice.setAlignment(Pos.CENTER);
-        lblDailyPrice.setStyle("-fx-background-color: #000000; -fx-border-width: 0px0px0px0px; " +
-                " -fx-border-color:#000000; -fx-font-weight: BOLd;-fx-font-size:24; -fx-text-fill: #ffffff;" +
-                "-fx-background-radius: 35; -fx-border-radius: 35;");
+        lblDailyPrice.setStyle("-fx-background-color: #ffffff; " + "-fx-font-weight: BOLd;-fx-font-size:25; -fx-text-fill: #000000;");
         lblDailyPrice.setMaxWidth(260);
 
         // Label for total shares
@@ -194,9 +192,7 @@ public class Interfaces extends Application {
 
         Label lblMyShares = new Label("My Shares");
         lblMyShares.setAlignment(Pos.CENTER);
-        lblMyShares.setStyle("-fx-background-color: #000000; -fx-border-width: 0px0px0px0px; " +
-                " -fx-border-color:#000000; -fx-font-weight: BOLd;-fx-font-size:24; -fx-text-fill: #ffffff;" +
-                "-fx-background-radius: 35; -fx-border-radius: 35;");
+        lblMyShares.setStyle("-fx-background-color: #ffffff; " + "-fx-font-weight: BOLd;-fx-font-size:25; -fx-text-fill: #000000;");
         lblMyShares.setMaxWidth(260);
 
         // Label for total shares
@@ -230,9 +226,9 @@ public class Interfaces extends Application {
     }
 
     public VBox functions() {
-        VBox vBox = new VBox(20);
+        VBox vBox = new VBox(25);
         vBox.setPadding(new Insets(5, 5, 5, 5));
-        vBox.setAlignment(Pos.TOP_CENTER);
+        vBox.setAlignment(Pos.CENTER);
         vBox.setStyle("-fx-background-color: #ffffff");
 
 
@@ -261,7 +257,20 @@ public class Interfaces extends Application {
         btReport.setOnMouseExited(e -> {
             btReport.setStyle(styleBt);
         });
-       // btReport.setOnAction(e -> Details.viewDetails("Hello how arre you ammer"));
+        btReport.setOnAction(e -> {
+            if(Utilities.totalCapital != 0){
+                String res;
+                if (Utilities.totalCapital < 0) {
+                    res = " you lost " + (Utilities.totalCapital * -1);
+                } else {
+                    res = " you earned " + Utilities.totalCapital;
+                }
+                Details.viewDetails(Utilities.report + "\nTotal profit: " + res + "\n");
+            }else{
+                Message.displayMassage(""," You don't have any sales movement ");
+            }
+
+        });
 
         btSell = new Button("Sell Shares");
         btSell.setMinWidth(275);
@@ -276,7 +285,7 @@ public class Interfaces extends Application {
         btSell.setOnAction(e -> GUI.SellingGUI.Sell(Utilities.dailyPriceLinkedList));
 
 
-        vBox.setMargin(btBuy, new Insets(45, 0, 0, 0));
+    //    vBox.setMargin(btBuy, new Insets(45, 0, 0, 0));
 
         vBox.getChildren().addAll(btBuy, btSell, btReport);
 
