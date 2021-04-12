@@ -1,3 +1,8 @@
+/**
+ * @author: Amir Eleyan
+ * ID: 1191076
+ * At: 12/4/2021  4:32 AM
+ */
 package GUI;
 
 import Shares.Buying;
@@ -249,17 +254,17 @@ public class SellingGUI {
         if (flag) {
             Message.displayMassage("Warning", (" You don't have shares from ") + (searchCompany.getCompanyName()) +
                     (" company to sell them.\n"));
-        } else {
-            details += "At " + Utilities.buyingDate(new Date()) + " Total capital: " + ((total < 0) ? (" you lost " + total * -1) : " you earned " + total);
-            Utilities.tempBuyingQueue.merge(Utilities.buyingLinkedQueues.getFirst());
-            Utilities.buyingLinkedQueues = Utilities.tempBuyingQueue;
-            Utilities.totalCapital += total;
-            Utilities.report += details + "\n______________________________________________\n";
-            Utilities.buyingLinkedStacks.fillFromQueue(Utilities.buyingLinkedQueues.getFirst());
-            Interfaces.uploadListToTable(Utilities.buyingLinkedQueues);
-            Details.viewDetails(details);
             txtNumberOfShares.clear();
         }
+        details += "At " + Utilities.buyingDate(new Date()) + " Total capital: " + ((total < 0) ? (" you lost " + total * -1) : " you earned " + total);
+        Utilities.tempBuyingQueue.merge(Utilities.buyingLinkedQueues.getFirst());
+        Utilities.buyingLinkedQueues = Utilities.tempBuyingQueue;
+        Utilities.totalCapital += total;
+        Utilities.report += details + "\n______________________________________________\n";
+        Utilities.buyingLinkedStacks.fillFromQueue(Utilities.buyingLinkedQueues.getFirst());
+        Interfaces.uploadListToTable(Utilities.buyingLinkedQueues);
+        if (!flag) Details.viewDetails(details);
+        txtNumberOfShares.clear();
 
     }
 
@@ -315,15 +320,15 @@ public class SellingGUI {
         if (flag) {
             Message.displayMassage("Warning", (" You don't have shares from ") + (searchCompany.getCompanyName()) +
                     (" company to sell them.\n"));
-        } else {
-            details += "At " + Utilities.buyingDate(new Date()) + " Total capital: " + ((total < 0) ? (" you lost " + total * -1) : " you earned " + total);
-            Utilities.buyingLinkedStacks.append(Utilities.tempBuyingStacks.getTopItem());
-            Utilities.totalCapital += total;
-            Utilities.report += details + "\n______________________________________________\n";
-            Utilities.buyingLinkedQueues.fillFromStacks(Utilities.buyingLinkedStacks.getTopItem());
-            Interfaces.uploadListToTable(Utilities.buyingLinkedQueues);
-            Details.viewDetails(details);
             txtNumberOfShares.clear();
         }
+        details += "At " + Utilities.buyingDate(new Date()) + " Total capital: " + ((total < 0) ? (" you lost " + total * -1) : " you earned " + total);
+        Utilities.buyingLinkedStacks.append(Utilities.tempBuyingStacks.getTopItem());
+        Utilities.totalCapital += total;
+        Utilities.report += details + "\n______________________________________________\n";
+        Utilities.buyingLinkedQueues.fillFromStacks(Utilities.buyingLinkedStacks.getTopItem());
+        Interfaces.uploadListToTable(Utilities.buyingLinkedQueues);
+        if (!flag) Details.viewDetails(details);
+        txtNumberOfShares.clear();
     }
 }
