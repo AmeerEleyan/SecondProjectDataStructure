@@ -17,6 +17,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lists.LinkedList;
 import lists.LinkedQueues;
+import lists.LinkedStacks;
 import lists.Node;
 
 import java.util.Date;
@@ -115,73 +116,33 @@ public class SellingGUI {
         btSell.setOnAction(e -> {
             if (accountingPrinciple.getValue() == null) {
                 Message.displayMassage("Warning", " Please select the account ");
+
             } else if (txtNumberOfShares.getText().trim().isEmpty()) {
                 Message.displayMassage("Warning", " Please enter the number of shares ");
+
             } else if (!Utilities.isNumber(txtNumberOfShares.getText().trim())) {
                 Message.displayMassage("Error", " The number of shares is invalid ");
                 txtNumberOfShares.clear();
+
             } else if (chxCompanyName.getValue() == null) {
                 Message.displayMassage("Warning", " Please select the company ");
+
             } else {
                 if (Utilities.buyingLinkedQueues.isEmpty()) {
                     Message.displayMassage("Warning", " You do not currently have any shares to sell ");
                 } else {
+
                     DailyPrice searchCompany = Utilities.dailyPriceLinkedList
                             .search(new DailyPrice(chxCompanyName.getValue().trim(), 0));
-                    float dailyPrice = searchCompany.getSharesSalePrice();
 
                     int numberOfShares = Integer.parseInt(txtNumberOfShares.getText().trim());
-                    StringBuilder detail = new StringBuilder();
 
                     // queue
                     if (accountingPrinciple.getValue().equals("Sell old shares first")) {
-
-                        Node<Buying> first = Utilities.buyingLinkedQueues.getFirst();
-                        float total = 0;
-                        Utilities.tempBuyingQueue = new LinkedQueues<>();
-                        String date = Utilities.buyingDate(new Date());
-                        while (first != null) {
-
-                            if (first.getData().getCompanyName().equals(searchCompany.getCompanyName())) {
-                                if (numberOfShares >= first.getData().getNumberOfShares()) {
-                                    Utilities.buyingLinkedQueues.dequeue();
-                                } else {
-                                    first.getData().setNumberOfShares(first.getData().getNumberOfShares() - numberOfShares);
-                                   // first = null;
-                                }
-                                // loss/earned
-                                float temp = (numberOfShares * (dailyPrice - first.getData().getSharesBuyingPrice()));
-                                if (temp < 0) {//loss
-                                    detail.append("* On +").append(date).append(" you lost  $ ").append(temp).append(" in the shares you\nbought on ").
-                                            append(first.getData().getStringDate()).append(" from ").append(searchCompany.getCompanyName()).append(" company\n");
-                                } else if (temp == 0) { // no change on the capital
-                                    detail.append("* On ").append(date).append(" you sold at ").append(numberOfShares).append(" shares which you bought from\n").
-                                            append(searchCompany.getCompanyName()).append(" company on ").append(first.getData().getStringDate()).append(" in the same capital\n");
-                                } else {// earned
-                                    detail.append("fadfjkdsfnsdf");
-                                    //detail.append("* On ").append(date).append(" you earned   $ ").append(temp).append(" in the shares you\nbought on ")
-                                           // .append(first.getData().getStringDate()).append(" from ").append(searchCompany.getCompanyName()).append(" company\n");
-                                }
-                                numberOfShares -= first.getData().getNumberOfShares();
-                                total += temp;
-                            } else {
-                                Utilities.tempBuyingQueue.enqueue(Utilities.buyingLinkedQueues.dequeue());
-                                first = Utilities.buyingLinkedQueues.getFirst();
-                            }
-                        }
-                        if (numberOfShares > 0) {
-                            detail.append("You do not have enough shares of Company ").append(searchCompany.getCompanyName()).append(" to sell them.").append(" So, ").append(numberOfShares).append(" remain unsold\n");
-                        }
-                        Utilities.tempBuyingQueue.merge(Utilities.buyingLinkedQueues.getFirst());
-                        Utilities.buyingLinkedQueues = Utilities.tempBuyingQueue;
-                        Utilities.totalCapital += total;
-                        Utilities.buyingLinkedStacks.clear();
-                        Utilities.buyingLinkedStacks.fillFromQueue(Utilities.buyingLinkedQueues.getFirst());
-                        Interfaces.uploadListToTable(Utilities.buyingLinkedQueues);
-                        Details.viewDetails(detail.toString());
+                        sellFromQueue(searchCompany, numberOfShares);
                     } // stacks
                     else {
-                        System.out.println("sdfds");
+                        sellFromStacks(searchCompany, numberOfShares);
                     }
 
                 }
@@ -220,4 +181,141 @@ public class SellingGUI {
         window.show();
     }
 
+    private static String loss(float lost, String buyingDate, String companyName) {
+        return "* On " + Utilities.buyingDate(new Date()) + " you lost $ " + lost + " in the shares you\nbought on " + buyingDate + " from " + companyName + "\n\n";
+    }
+
+    private static String sameCapital(int numberOfShares, String buyingDate, String companyName) {
+        return "* On " + Utilities.buyingDate(new Date()) + " you sold " + numberOfShares + " shares in the same capital\nwhich you bought from"
+                + companyName + " company on " + buyingDate + "\n\n";
+    }
+
+    private static String earned(float profit, String buyingDate, String companyName) {
+        return "* On " + Utilities.buyingDate(new Date()) + " you earned  $ " + profit + " in the shares you\nbought on " + buyingDate + " from " + companyName + " company\n\n";
+    }
+
+    private static void sellFromQueue(DailyPrice searchCompany, int numberOfShares) {
+
+        Node<Buying> first = Utilities.buyingLinkedQueues.getFirst();
+        float total = 0;
+        Utilities.tempBuyingQueue = new LinkedQueues<>();
+        float dailyPrice = searchCompany.getSharesSalePrice();
+        String details = "";
+
+        while (first != null) {
+
+            int sharesBuying = first.getData().getNumberOfShares();
+            String companyN = first.getData().getCompanyName();
+            float priceBuying = first.getData().getSharesBuyingPrice();
+            String strDate = first.getData().getStringDate();
+
+            if (companyN.equals(searchCompany.getCompanyName())) {
+                if (numberOfShares >= sharesBuying) {
+                    Utilities.buyingLinkedQueues.dequeue();
+                    float temp = (sharesBuying * (dailyPrice - priceBuying));
+                    if (temp < 0) {//loss
+                        details += loss(temp * -1, strDate, companyN);
+                    } else if (temp == 0) { // no change on the capital
+                        details += sameCapital(numberOfShares, strDate, companyN);
+                    } else {// earned
+                        details += earned(temp, strDate, companyN);
+                    }
+                    numberOfShares = numberOfShares - first.getData().getNumberOfShares();
+                    total += temp;
+                } else {
+                    first.getData().setNumberOfShares(sharesBuying - numberOfShares);
+                    float temp = (numberOfShares * (dailyPrice - priceBuying));
+                    if (temp < 0) {//loss
+                        details += loss(temp * -1, strDate, companyN);
+                    } else if (temp == 0) { // no change on the capital
+                        details += sameCapital(numberOfShares, strDate, companyN);
+                    } else {// earned
+                        details += earned(temp, strDate, companyN);
+                    }
+                    total += temp;
+                    break;
+                }
+
+            }
+            if (numberOfShares > 0) {
+                Utilities.tempBuyingQueue.enqueue(Utilities.buyingLinkedQueues.dequeue());
+                first = Utilities.buyingLinkedQueues.getFirst();
+            } else break;
+
+        }
+        /*if (numberOfShares > 0) {
+            details += ("You do not have enough shares of company ") + (first.getData().getCompanyName()) +
+                    (" to sell them.") + (" So, ") + (numberOfShares) + (" remain unsold\n");
+        }*/
+        details += "At " + Utilities.buyingDate(new Date()) + " Total capital: " + ((total < 0) ? (" you lost " + total * -1) : " you earned " + total);
+        Utilities.tempBuyingQueue.merge(Utilities.buyingLinkedQueues.getFirst());
+        Utilities.buyingLinkedQueues = Utilities.tempBuyingQueue;
+        Utilities.totalCapital += total;
+        Utilities.buyingLinkedStacks.fillFromQueue(Utilities.buyingLinkedQueues.getFirst());
+        Interfaces.uploadListToTable(Utilities.buyingLinkedQueues);
+        Details.viewDetails(details);
+        txtNumberOfShares.clear();
+
+    }
+
+    private static void sellFromStacks(DailyPrice searchCompany, int numberOfShares) {
+        Node<Buying> first = Utilities.buyingLinkedStacks.getTopItem();
+        float total = 0;
+        Utilities.tempBuyingStacks = new LinkedStacks<>();
+        float dailyPrice = searchCompany.getSharesSalePrice();
+        String details = "";
+
+        while (first != null) {
+
+            int sharesBuying = first.getData().getNumberOfShares();
+            String companyN = first.getData().getCompanyName();
+            float priceBuying = first.getData().getSharesBuyingPrice();
+            String strDate = first.getData().getStringDate();
+
+            if (companyN.equals(searchCompany.getCompanyName())) {
+                if (numberOfShares >= sharesBuying) {
+                    Utilities.buyingLinkedStacks.pop();
+                    float temp = (sharesBuying * (dailyPrice - priceBuying));
+                    if (temp < 0) {//loss
+                        details += loss(temp * -1, strDate, companyN);
+                    } else if (temp == 0) { // no change on the capital
+                        details += sameCapital(numberOfShares, strDate, companyN);
+                    } else {// earned
+                        details += earned(temp, strDate, companyN);
+                    }
+                    numberOfShares = numberOfShares - first.getData().getNumberOfShares();
+                    total += temp;
+                } else {
+                    first.getData().setNumberOfShares(sharesBuying - numberOfShares);
+                    float temp = (numberOfShares * (dailyPrice - priceBuying));
+                    if (temp < 0) {//loss
+                        details += loss(temp * -1, strDate, companyN);
+                    } else if (temp == 0) { // no change on the capital
+                        details += sameCapital(numberOfShares, strDate, companyN);
+                    } else {// earned
+                        details += earned(temp, strDate, companyN);
+                    }
+                    total += temp;
+                    break;
+                }
+
+            }
+            if (numberOfShares > 0) {
+                Utilities.tempBuyingStacks.push(Utilities.buyingLinkedStacks.pop());
+                first = Utilities.buyingLinkedStacks.getTopItem();
+            } else break;
+
+        }
+        /*if (numberOfShares > 0) {
+            details += ("You do not have enough shares of company ") + (first.getData().getCompanyName()) +
+                    (" to sell them.") + (" So, ") + (numberOfShares) + (" remain unsold\n");
+        }*/
+        details += "At " + Utilities.buyingDate(new Date()) + " Total capital: " + ((total < 0) ? (" you lost " + total * -1) : " you earned " + total);
+        Utilities.buyingLinkedStacks.append(Utilities.tempBuyingStacks.getTopItem());
+        Utilities.totalCapital += total;
+        Utilities.buyingLinkedQueues.fillFromStacks(Utilities.buyingLinkedStacks.getTopItem());
+        Interfaces.uploadListToTable(Utilities.buyingLinkedQueues);
+        Details.viewDetails(details);
+        txtNumberOfShares.clear();
+    }
 }

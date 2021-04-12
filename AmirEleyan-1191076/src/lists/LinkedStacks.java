@@ -119,6 +119,14 @@ public class LinkedStacks<T extends Comparable<T>> {
         }
     }
 
+    public void append(Node<T> topItem){
+        if(topItem != null){
+            this.push(topItem.getData());
+            append(topItem.getNext());
+        }
+
+    }
+
     /**
      * return the top item as a node
      */
