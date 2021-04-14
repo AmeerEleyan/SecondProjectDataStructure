@@ -38,7 +38,7 @@ public class Interfaces extends Application {
         Utilities.readPurchaseDataFromAFile("dailyPrice.txt", Utilities.dailyPriceLinkedList);
         Utilities.readPurchaseDataFromAFile("shares.txt", new Object());
         stage.setScene(new Scene(allComponents()));
-        uploadListToTable(Utilities.buyingLinkedQueues);
+        updateTable(Utilities.buyingLinkedQueues);
         stage.show();
     }
 
@@ -126,7 +126,7 @@ public class Interfaces extends Application {
     /**
      * to view data in table view
      */
-    public static void uploadListToTable(LinkedQueues<Buying> list) {
+    public static void updateTable(LinkedQueues<Buying> list) {
         if (!list.isEmpty()) {
             buyingTableView.getItems().clear(); // clear data from table
             Node<Buying> curr = list.getFirst();
@@ -138,7 +138,7 @@ public class Interfaces extends Application {
             }
             txtTotalShares.setText(count + "");
         } else {
-            Message.displayMassage("Data", " There are no shares to display ");
+            buyingTableView.getItems().clear(); // clear data from table
         }
     }
 
@@ -258,16 +258,19 @@ public class Interfaces extends Application {
             btReport.setStyle(styleBt);
         });
         btReport.setOnAction(e -> {
-            if(Utilities.totalCapital != 0){
+            if (!Utilities.report.isEmpty()) {
                 String res;
                 if (Utilities.totalCapital < 0) {
                     res = " you lost " + (Utilities.totalCapital * -1);
-                } else {
+                } else if (Utilities.totalCapital > 0) {
                     res = " you earned " + Utilities.totalCapital;
+                } else {
+                    res = "" + Utilities.totalCapital;
                 }
+
                 Details.viewDetails(Utilities.report + "\nTotal profit: " + res + "\n");
-            }else{
-                Message.displayMassage(""," You don't have any sales movement ");
+            } else {
+                Message.displayMassage("", " You don't have any sales movement ");
             }
 
         });
@@ -285,7 +288,7 @@ public class Interfaces extends Application {
         btSell.setOnAction(e -> GUI.SellingGUI.Sell(Utilities.dailyPriceLinkedList));
 
 
-    //    vBox.setMargin(btBuy, new Insets(45, 0, 0, 0));
+        //    vBox.setMargin(btBuy, new Insets(45, 0, 0, 0));
 
         vBox.getChildren().addAll(btBuy, btSell, btReport);
 

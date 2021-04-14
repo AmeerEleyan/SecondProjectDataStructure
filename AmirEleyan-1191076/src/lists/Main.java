@@ -5,7 +5,7 @@ import java.util.Date;
 public class Main {
 
     public static void main(String[] args) {
-        LinkedStacks<Integer> l = new LinkedStacks<>();
+       /* LinkedStacks<Integer> l = new LinkedStacks<>();
         l.push(1);
         l.push(2);
         l.push(3);
@@ -20,6 +20,7 @@ public class Main {
 
         l.append(p.getTopItem());
         l.displayStacks();
-        p.displayStacks();
+        p.displayStacks();*/
+
     }
 }

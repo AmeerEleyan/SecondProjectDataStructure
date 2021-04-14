@@ -113,6 +113,7 @@ public class LinkedStacks<T extends Comparable<T>> {
      */
     public void fillFromQueue(Node<T> headQueue) {
         this.clear();
+        // queue: 1 2 3 4 then stacks 4 3 2 1
         while (headQueue != null) {
             this.push(headQueue.getData());
             headQueue = headQueue.getNext();
