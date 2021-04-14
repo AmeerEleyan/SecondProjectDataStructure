@@ -120,9 +120,7 @@ public class Buying implements Comparable<Buying> {
      */
     @Override
     public String toString() {
-        return "numberOfShares: " + numberOfShares +
-                ", sharesBuyingPrice: " + sharesBuyingPrice +
-                ", companyName: " + companyName + ", date: " + date +
+        return  numberOfShares +", "+ sharesBuyingPrice +", "+ companyName + ", " + date +
                 "/" + month + "/" + year + '\n';
     }
 

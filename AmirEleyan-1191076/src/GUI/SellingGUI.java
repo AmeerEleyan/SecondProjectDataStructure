@@ -257,7 +257,7 @@ public class SellingGUI {
 
         }
         if (!Utilities.tempBuyingQueue.isEmpty()) { // I haven't enqueued any item to tempBuying
-            Utilities.tempBuyingQueue.merge(Utilities.buyingQueues.getFirst());
+            Utilities.tempBuyingQueue.merge(Utilities.buyingQueues);
             Utilities.buyingQueues = Utilities.tempBuyingQueue;
         }
 

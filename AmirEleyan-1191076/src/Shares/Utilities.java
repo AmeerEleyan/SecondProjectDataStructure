@@ -39,7 +39,7 @@ public final class Utilities {
             Scanner input = new Scanner(file); // instance of scanner for read data from file
             if (file.length() == 0) {
                 // no data in file
-                GUI.Message.displayMassage("Warning", "  There are No records in file " + fileName + "  ");
+                GUI.Message.displayMassage("Warning", "  There are No records in file " + fileName + " ");
             } else {
                 int line = 1; // represent line on the file to display in which line has problem If that happens
 
@@ -68,13 +68,6 @@ public final class Utilities {
             // The specific file for reading data does not exist
             GUI.Message.displayMassage("Error", " The system can NOT find the file " + fileName + "  ");
         }
-    }
-
-    public static void purchasing(Buying buying, Object list) {
-        if (list instanceof LinkedQueues)
-            buyingQueues.enqueue(buying);
-        else if (list instanceof LinkedStacks)
-            buyingStacks.push(buying);
     }
 
     /**

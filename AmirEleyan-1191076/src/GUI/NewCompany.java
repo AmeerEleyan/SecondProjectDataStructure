@@ -1,3 +1,8 @@
+/**
+ * @author: Amir Eleyan
+ * ID: 1191076
+ * At: 14/4/2021  10:36 AM
+ */
 package GUI;
 
 import Shares.DailyPrice;
@@ -68,7 +73,7 @@ public class NewCompany {
         pane.add(lblCompanyN, 0, 0);
         pane.add(txtCompanyN, 1, 0);
 
-        pane.add(lblDailyPrice, 1, 0);
+        pane.add(lblDailyPrice, 0, 1);
         pane.add(txtDailyPrice, 1, 1);
 
         btAdd = new Button("Add");
@@ -84,12 +89,16 @@ public class NewCompany {
                     if (Utilities.isDailyPrice(txtDailyPrice.getText().trim())) {
                         float dailyPrice = Float.parseFloat(txtDailyPrice.getText());
                         Utilities.dailyPriceLinkedList.insertAtLast(new DailyPrice(txtCompanyN.getText(), dailyPrice));
-
+                        Interfaces.updateTable(Utilities.dailyPriceLinkedList);
+                        Message.displayMassage("Success", " Company " + txtCompanyN.getText().trim() + " has been added successfully ");
+                        txtCompanyN.clear();
                     } else {
                         Message.displayMassage("Warning", " The daily price is invalid ");
                     }
+                    txtDailyPrice.clear();
                 } else {
                     Message.displayMassage("Warning", " The company name is invalid ");
+                    txtCompanyN.clear();
                 }
             }
         });
@@ -123,7 +132,6 @@ public class NewCompany {
         window.setMinHeight(250);
         window.setResizable(false);
         window.show();
-
 
     }
 }

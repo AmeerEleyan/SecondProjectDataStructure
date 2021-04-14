@@ -76,9 +76,7 @@ public class LinkedStacks<T extends Comparable<T>> {
     }
 
     public void merge(Node<T> topItem) {
-        if (topItem == null)
-            return;
-        else {
+        if (topItem != null) {
             merge(topItem.getNext());
             this.push(topItem.getData());
         }

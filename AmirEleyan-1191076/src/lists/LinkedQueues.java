@@ -81,12 +81,12 @@ public class LinkedQueues<T extends Comparable<T>> {
     /**
      * Merge to queue with them
      */
-    public void merge(Node<T> first) {
-        if (first == null) return;
-        else {
-            this.enqueue(first.getData()); // add this element to this queue
-            merge(first.getNext()); //  recursion function
+    public void merge(LinkedQueues<T> linkedQueues) {
+        if(!linkedQueues.isEmpty()){
+            this.last.setNext(linkedQueues.first.getNext());
+            this.last = linkedQueues.last;
         }
+
     }
 
     /**
@@ -100,7 +100,7 @@ public class LinkedQueues<T extends Comparable<T>> {
         StringBuilder str = new StringBuilder(); // to store the data as a string
 
         while (current != null) {
-            str.append(current).append(" ");
+            str.append(current);
             current = current.getNext();
         }
         return str.toString();

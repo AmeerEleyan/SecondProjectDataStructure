@@ -13,14 +13,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import lists.LinkedQueues;
+import lists.LinkedList;
 import lists.Node;
 
 public class Interfaces extends Application {
     private static TextField txtTotalShares, txtTotalCompany;
     private Label lblTotalShares, lblTotalCompany;
-    private Button btBuy, btSell, btReport;
+    private Button btBuy, btSell, btReport, btNewCompany;
     private static TableView<Buying> buyingTableView;
+    private static TableView<DailyPrice> dailyPriceTable;
 
 
     // Style for buttons
@@ -39,6 +40,8 @@ public class Interfaces extends Application {
         Utilities.readPurchaseDataFromAFile("shares.txt", new Object());
         stage.setScene(new Scene(allComponents()));
         updateTable(Utilities.buyingQueues);
+        updateTable(Utilities.dailyPriceLinkedList);
+        stage.setOnCloseRequest(e -> FileUpdate.update());
         stage.show();
     }
 
@@ -47,9 +50,9 @@ public class Interfaces extends Application {
     /**
      * Table view to display dailyPrice
      */
-    public TableView<DailyPrice> dailyPriceTable() {
+    public static TableView<DailyPrice> dailyPriceTable() {
 
-        TableView<DailyPrice> dailyPriceTable = new TableView<>();
+        dailyPriceTable = new TableView<>();
         dailyPriceTable.setEditable(false);
         dailyPriceTable.setMinWidth(250);
         dailyPriceTable.setMinHeight(420);
@@ -68,18 +71,6 @@ public class Interfaces extends Application {
         priceShare.setSortable(false);
         priceShare.setResizable(false);
         priceShare.setCellValueFactory(new PropertyValueFactory<>("sharesSalePrice"));
-
-        if (!Utilities.dailyPriceLinkedList.isEmpty()) {
-            dailyPriceTable.getItems().clear(); // clear data from table
-            Node<DailyPrice> curr = Utilities.dailyPriceLinkedList.getHead();
-            int count = 0;
-            while (curr != null) {
-                dailyPriceTable.getItems().add(curr.getData()); // upload data to the table
-                count++;
-                curr = curr.getNext();
-            }
-            txtTotalCompany.setText(count + "");
-        }
 
         dailyPriceTable.getColumns().addAll(companyName, priceShare);
         return dailyPriceTable;
@@ -126,20 +117,38 @@ public class Interfaces extends Application {
     /**
      * to view data in table view
      */
-    public static void updateTable(LinkedQueues<Buying> list) {
-        if (!list.isEmpty()) {
-            buyingTableView.getItems().clear(); // clear data from table
-            Node<Buying> curr = list.getFirst();
-            int count = 0;
-            while (curr != null) {
-                buyingTableView.getItems().add(curr.getData()); // upload data to the table
-                curr = curr.getNext();
-                count++;
+    public static void updateTable(Object list) {
+
+        if (list instanceof LinkedList) {
+            if (!Utilities.dailyPriceLinkedList.isEmpty()) {
+                dailyPriceTable.getItems().clear(); // clear data from table
+                Node<DailyPrice> curr = Utilities.dailyPriceLinkedList.getHead();
+                int count = 0;
+                while (curr != null) {
+                    dailyPriceTable.getItems().add(curr.getData()); // upload data to the table
+                    count++;
+                    curr = curr.getNext();
+                }
+                txtTotalCompany.setText(count + "");
+            } else {
+                dailyPriceTable.getItems().clear(); // clear data from table
             }
-            txtTotalShares.setText(count + "");
         } else {
-            buyingTableView.getItems().clear(); // clear data from table
+            if (!Utilities.buyingQueues.isEmpty()) {
+                buyingTableView.getItems().clear(); // clear data from table
+                Node<Buying> curr = Utilities.buyingQueues.getFirst();
+                int count = 0;
+                while (curr != null) {
+                    buyingTableView.getItems().add(curr.getData()); // upload data to the table
+                    curr = curr.getNext();
+                    count++;
+                }
+                txtTotalShares.setText(count + "");
+            } else {
+                buyingTableView.getItems().clear(); // clear data from table
+            }
         }
+
     }
 
     public VBox vBoxDailyPrice() {
@@ -287,10 +296,22 @@ public class Interfaces extends Application {
         });
         btSell.setOnAction(e -> GUI.SellingGUI.Sell(Utilities.dailyPriceLinkedList));
 
+        btNewCompany = new Button("New company");
+        btNewCompany.setMinWidth(275);
+        btNewCompany.setMinHeight(40);
+        btNewCompany.setStyle(styleBt);
+        btNewCompany.setOnMouseEntered(e -> {
+            btNewCompany.setStyle(styleHoverBt);
+        });
+        btNewCompany.setOnMouseExited(e -> {
+            btNewCompany.setStyle(styleBt);
+        });
+        btNewCompany.setOnAction(e -> NewCompany.addNewCompany());
+
 
         //    vBox.setMargin(btBuy, new Insets(45, 0, 0, 0));
 
-        vBox.getChildren().addAll(btBuy, btSell, btReport);
+        vBox.getChildren().addAll(btBuy, btSell, btReport, btNewCompany);
 
 
         return vBox;
