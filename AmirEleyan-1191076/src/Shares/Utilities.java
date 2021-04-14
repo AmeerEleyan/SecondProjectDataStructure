@@ -16,13 +16,13 @@ import java.util.Scanner;
 
 public final class Utilities {
 
-    public static LinkedStacks<Buying> buyingLinkedStacks = new LinkedStacks<>();
-    public static LinkedQueues<Buying> buyingLinkedQueues = new LinkedQueues<>();
+    public static LinkedStacks<Buying> buyingStacks = new LinkedStacks<>();
+    public static LinkedQueues<Buying> buyingQueues = new LinkedQueues<>();
     public static LinkedStacks<Buying> tempBuyingStacks;
     public static LinkedQueues<Buying> tempBuyingQueue;
     public static LinkedList<DailyPrice> dailyPriceLinkedList = new LinkedList<>();
     public static float totalCapital = 0;
-    public static String report ="";
+    public static String report = "";
 
     // to prevent create obj from this class
     private Utilities() {
@@ -49,8 +49,8 @@ public final class Utilities {
                         if (list instanceof LinkedList) {
                             dailyPriceLinkedList.insertAtLast(new DailyPrice(temp));
                         } else {
-                            buyingLinkedQueues.enqueue(new Buying(temp));
-                            buyingLinkedStacks.push(new Buying(temp));
+                            buyingQueues.enqueue(new Buying(temp));
+                            buyingStacks.push(new Buying(temp));
                         }
 
                         line++; // increment the line by one
@@ -72,9 +72,9 @@ public final class Utilities {
 
     public static void purchasing(Buying buying, Object list) {
         if (list instanceof LinkedQueues)
-            buyingLinkedQueues.enqueue(buying);
+            buyingQueues.enqueue(buying);
         else if (list instanceof LinkedStacks)
-            buyingLinkedStacks.push(buying);
+            buyingStacks.push(buying);
     }
 
     /**
@@ -95,17 +95,6 @@ public final class Utilities {
         if (txt.matches("\\d+") && Integer.parseInt(txt) > 0)
             return true;
         return false;
-    }
-
-    public static void main(String[] arg) {
-       /* Utilities.readPurchaseDataFromAFile("shares.txt", new Object());
-        Utilities.readPurchaseDataFromAFile("dailyPrice.txt", dailyPriceLinkedList);
-
-        Utilities.buyingLinkedQueues.displayQueue();
-        Utilities.buyingLinkedStacks.displayStacks();
-        Utilities.dailyPriceLinkedList.printList();*/
-        Date date = new Date();
-        System.out.println(Utilities.buyingDate(new Date()));
     }
 
 }

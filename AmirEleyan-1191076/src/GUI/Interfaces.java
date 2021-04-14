@@ -38,7 +38,7 @@ public class Interfaces extends Application {
         Utilities.readPurchaseDataFromAFile("dailyPrice.txt", Utilities.dailyPriceLinkedList);
         Utilities.readPurchaseDataFromAFile("shares.txt", new Object());
         stage.setScene(new Scene(allComponents()));
-        updateTable(Utilities.buyingLinkedQueues);
+        updateTable(Utilities.buyingQueues);
         stage.show();
     }
 

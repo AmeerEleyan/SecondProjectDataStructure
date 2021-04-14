@@ -143,10 +143,10 @@ public class BuyingGUI {
                 buying.setStringDate(currentDate.getDate(),
                         currentDate.getMonth() + 1, currentDate.getYear() + 1900);
 
-                Utilities.buyingLinkedQueues.enqueue(buying);
-                Utilities.buyingLinkedStacks.push(buying);
+                Utilities.buyingQueues.enqueue(buying);
+                Utilities.buyingStacks.push(buying);
 
-                Interfaces.updateTable(Utilities.buyingLinkedQueues);
+                Interfaces.updateTable(Utilities.buyingQueues);
 
                 Message.displayMassage("Success", (txtNumberOfShares.getText().trim() +
                         " shares of " + chxCompanyName.getValue().trim() + " Company were purchased successfully "));

@@ -133,7 +133,7 @@ public class SellingGUI {
                 Message.displayMassage("Warning", " Please select the company ");
 
             } else {
-                if (Utilities.buyingLinkedQueues.isEmpty()) {
+                if (Utilities.buyingQueues.isEmpty()) {
                     Message.displayMassage("Warning", " You do not currently have any shares to sell ");
                     txtNumberOfShares.clear();
                 } else {
@@ -200,9 +200,12 @@ public class SellingGUI {
         return "* On " + Utilities.buyingDate(new Date()) + " you earned  $ " + profit + " in the shares you\nbought on " + buyingDate + " from " + companyName + " company\n\n";
     }
 
+    /**
+     * Sell shares from queue
+     */
     private static void sellFromQueue(DailyPrice searchCompany, int numberOfShares) {
 
-        Node<Buying> first = Utilities.buyingLinkedQueues.getFirst();
+        Node<Buying> first = Utilities.buyingQueues.getFirst();
         float total = 0;
         Utilities.tempBuyingQueue = new LinkedQueues<>();
         float dailyPrice = searchCompany.getSharesSalePrice();
@@ -219,7 +222,7 @@ public class SellingGUI {
             if (companyN.equals(searchCompany.getCompanyName())) {
                 if (numberOfShares >= sharesBuying) {
                     first = first.getNext();
-                    Utilities.buyingLinkedQueues.dequeue();
+                    Utilities.buyingQueues.dequeue();
                     float temp = (sharesBuying * (dailyPrice - priceBuying));
                     if (temp < 0) {//loss
                         details += loss(temp * -1, strDate, companyN);
@@ -248,14 +251,14 @@ public class SellingGUI {
                 }
 
             } else if (numberOfShares > 0) {
-                Utilities.tempBuyingQueue.enqueue(Utilities.buyingLinkedQueues.dequeue());
-                first = Utilities.buyingLinkedQueues.getFirst();
+                Utilities.tempBuyingQueue.enqueue(Utilities.buyingQueues.dequeue());
+                first = Utilities.buyingQueues.getFirst();
             } else break;
 
         }
         if (!Utilities.tempBuyingQueue.isEmpty()) { // I haven't enqueued any item to tempBuying
-            Utilities.tempBuyingQueue.merge(Utilities.buyingLinkedQueues.getFirst());
-            Utilities.buyingLinkedQueues = Utilities.tempBuyingQueue;
+            Utilities.tempBuyingQueue.merge(Utilities.buyingQueues.getFirst());
+            Utilities.buyingQueues = Utilities.tempBuyingQueue;
         }
 
         if (flag) { // there are no shares from specific company
@@ -263,19 +266,19 @@ public class SellingGUI {
                     (" company to sell them.\n"));
         } else {
             details += "At " + Utilities.buyingDate(new Date()) + " Total capital: ";
-            
+
             if (total < 0) {
-                details += " you lost " + (total * -1);
+                details += " you lost $ " + (total * -1);
             } else if (total == 0) {
                 details += "" + total;
             } else {
-                details += " you earned " + total;
+                details += " you earned $ " + total;
             }
 
             Utilities.totalCapital += total;
             Utilities.report += details + "\n______________________________________________\n";
-            Utilities.buyingLinkedStacks.fillFromQueue(Utilities.buyingLinkedQueues.getFirst());
-            Interfaces.updateTable(Utilities.buyingLinkedQueues);
+            Utilities.buyingStacks.fillFromQueue(Utilities.buyingQueues.getFirst());
+            Interfaces.updateTable(Utilities.buyingQueues);
             Details.viewDetails(details);
             if (numberOfShares > 0)
                 Message.displayMassage("Warning", " You do not have enough shares to sell.\n So there are " + numberOfShares + " shares not sold ");
@@ -283,8 +286,11 @@ public class SellingGUI {
         txtNumberOfShares.clear();
     }
 
+    /**
+     * Sell shares from stacks
+     */
     private static void sellFromStacks(DailyPrice searchCompany, int numberOfShares) {
-        Node<Buying> first = Utilities.buyingLinkedStacks.getTopItem();
+        Node<Buying> first = Utilities.buyingStacks.getTopItem();
         float total = 0;
         Utilities.tempBuyingStacks = new LinkedStacks<>();
         float dailyPrice = searchCompany.getSharesSalePrice();
@@ -299,7 +305,8 @@ public class SellingGUI {
 
             if (companyN.equals(searchCompany.getCompanyName())) {
                 if (numberOfShares >= sharesBuying) {
-                    Utilities.buyingLinkedStacks.pop();
+                    first = first.getNext();
+                    Utilities.buyingStacks.pop();
                     float temp = (sharesBuying * (dailyPrice - priceBuying));
                     if (temp < 0) {//loss
                         details += loss(temp * -1, strDate, companyN);
@@ -308,7 +315,7 @@ public class SellingGUI {
                     } else {// earned
                         details += earned(temp, strDate, companyN);
                     }
-                    numberOfShares = numberOfShares - first.getData().getNumberOfShares();
+                    numberOfShares = numberOfShares - sharesBuying;
                     total += temp;
                     flag = false;
                 } else {
@@ -321,29 +328,43 @@ public class SellingGUI {
                     } else {// earned
                         details += earned(temp, strDate, companyN);
                     }
+                    numberOfShares = 0;
                     total += temp;
                     flag = false;
                     break;
                 }
-            }
-            if (numberOfShares > 0) {
-                Utilities.tempBuyingStacks.push(Utilities.buyingLinkedStacks.pop());
-                first = Utilities.buyingLinkedStacks.getTopItem();
+            } else if (numberOfShares > 0) {
+                Utilities.tempBuyingStacks.push(Utilities.buyingStacks.pop());
+                first = Utilities.buyingStacks.getTopItem();
             } else break;
 
         }
+
+        Utilities.buyingStacks.append(Utilities.tempBuyingStacks.getTopItem());
+
         if (flag) {
             Message.displayMassage("Warning", (" You don't have shares from ") + (searchCompany.getCompanyName()) +
                     (" company to sell them.\n"));
-            txtNumberOfShares.clear();
+        } else {
+
+            details += "At " + Utilities.buyingDate(new Date()) + " Total capital: ";
+
+            if (total < 0) {
+                details += " you lost $ " + (total * -1);
+            } else if (total == 0) {
+                details += "" + total;
+            } else {
+                details += " you earned $ " + total;
+            }
+
+            Utilities.totalCapital += total;
+            Utilities.report += details + "\n______________________________________________\n";
+            Utilities.buyingQueues.fillFromStacks(Utilities.buyingStacks.getTopItem());
+            Interfaces.updateTable(Utilities.buyingQueues);
+            Details.viewDetails(details);
+            if (numberOfShares > 0)
+                Message.displayMassage("Warning", " You do not have enough shares to sell.\n So there are " + numberOfShares + " shares not sold ");
         }
-        details += "At " + Utilities.buyingDate(new Date()) + " Total capital: " + ((total < 0) ? (" you lost " + total * -1) : " you earned " + total);
-        Utilities.buyingLinkedStacks.append(Utilities.tempBuyingStacks.getTopItem());
-        Utilities.totalCapital += total;
-        Utilities.report += details + "\n______________________________________________\n";
-        Utilities.buyingLinkedQueues.fillFromStacks(Utilities.buyingLinkedStacks.getTopItem());
-        Interfaces.updateTable(Utilities.buyingLinkedQueues);
-        if (!flag) Details.viewDetails(details);
         txtNumberOfShares.clear();
     }
 }

@@ -120,8 +120,11 @@ public class LinkedStacks<T extends Comparable<T>> {
         }
     }
 
-    public void append(Node<T> topItem){
-        if(topItem != null){
+    /**
+     * add new items to this stacks
+     */
+    public void append(Node<T> topItem) {
+        if (topItem != null) {
             this.push(topItem.getData());
             append(topItem.getNext());
         }
