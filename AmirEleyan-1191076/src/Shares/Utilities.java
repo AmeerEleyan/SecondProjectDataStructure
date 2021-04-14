@@ -85,16 +85,34 @@ public final class Utilities {
     }
 
     /**
-     * To check the value of the entered numberOfShares if it is correct or not
+     * To check the value of the entered numberOfShares if contain only digits or not
      */
-    public static boolean isNumber(String txt) {
-
+    public static boolean isNumber(String number) {
         /* To check the entered number of shares, that it consists of
            only digits
          */
-        if (txt.matches("\\d+") && Integer.parseInt(txt) > 0)
+        if (number.matches("\\d+") && Integer.parseInt(number) > 0)
             return true;
         return false;
+    }
+
+    /**
+     * To check the value of the entered company name that if contain only char ot not
+     */
+    public static boolean isCompanyName(String companyN) {
+        return companyN.matches("[a-zA-Z]+");
+    }
+
+    /**
+     * To check the value of the entered daily price that if fraction ot not
+     */
+    public static boolean isDailyPrice(String dailyPrice) {
+        try {
+            Float.parseFloat(dailyPrice);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
 }

@@ -18,7 +18,7 @@ public class DailyPrice implements Comparable<DailyPrice> {
     /**
      * Constructor with specific arguments
      */
-    public DailyPrice(String companyName, int sharesPrice) {
+    public DailyPrice(String companyName, float sharesPrice) {
         this.companyName = companyName;
         this.sharesSalePrice = sharesPrice;
     }
