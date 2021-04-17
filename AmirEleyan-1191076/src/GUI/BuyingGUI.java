@@ -149,7 +149,10 @@ public class BuyingGUI {
                 Interfaces.updateTable(Utilities.buyingQueues);
 
                 Message.displayMassage("Success", (txtNumberOfShares.getText().trim() +
-                        " shares of " + chxCompanyName.getValue().trim() + " Company were purchased successfully "));
+                        " shares of " + chxCompanyName.getValue() + " Company were purchased successfully "));
+                Utilities.report += "* On " + (Utilities.buyingDate(new Date())) + " you bought " + txtNumberOfShares.getText() + " shares of " +
+                        chxCompanyName.getValue() + " company,  and the share price was $ " + buying.getSharesBuyingPrice()
+                        + "\n______________________________________________\n";
                 txtNumberOfShares.clear();
             }
 

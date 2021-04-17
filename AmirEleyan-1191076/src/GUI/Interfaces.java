@@ -42,8 +42,8 @@ public class Interfaces extends Application {
         updateTable(Utilities.buyingQueues);
         updateTable(Utilities.dailyPriceLinkedList);
         stage.setOnCloseRequest(e -> {
-            FileUpdate.update("shares.txt",Utilities.buyingQueues);
-            FileUpdate.update("dailyPrice.txt",Utilities.dailyPriceLinkedList);
+            FileUpdate.update("shares.txt", Utilities.buyingQueues);
+            FileUpdate.update("dailyPrice.txt", Utilities.dailyPriceLinkedList);
         });
         stage.show();
     }
@@ -134,6 +134,7 @@ public class Interfaces extends Application {
                 }
                 txtTotalCompany.setText(count + "");
             } else {
+                txtTotalCompany.clear();
                 dailyPriceTable.getItems().clear(); // clear data from table
             }
         } else {
@@ -143,11 +144,12 @@ public class Interfaces extends Application {
                 int count = 0;
                 while (curr != null) {
                     buyingTableView.getItems().add(curr.getData()); // upload data to the table
-                    count+=curr.getData().getNumberOfShares();
+                    count += curr.getData().getNumberOfShares();
                     curr = curr.getNext();
                 }
                 txtTotalShares.setText(count + "");
             } else {
+                txtTotalShares.clear();
                 buyingTableView.getItems().clear(); // clear data from table
             }
         }
