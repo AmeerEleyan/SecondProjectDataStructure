@@ -16,11 +16,11 @@ public class FileUpdate {
     /**
      * To print queue to the file(update)
      */
-    public static void update() {
+    public static void update(String fileName, Object list) {
         try {
-            File file = new File("shares.txt");
+            File file = new File(fileName);
             PrintWriter writer = new PrintWriter(file);
-            writer.println(Utilities.buyingQueues);
+            writer.println(list.toString());
             writer.close();
         } catch (IOException exception) {
             Message.displayMassage("Warning", exception.getMessage());

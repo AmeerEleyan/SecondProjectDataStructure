@@ -66,7 +66,7 @@ public class DailyPrice implements Comparable<DailyPrice> {
      */
     @Override
     public String toString() {
-        return "CompanyName: " + companyName + ", sharesPrice: " + sharesSalePrice + '\n';
+        return companyName + ", " + sharesSalePrice + '\n';
     }
 
     /**
