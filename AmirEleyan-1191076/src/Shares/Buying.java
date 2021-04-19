@@ -25,7 +25,7 @@ public class Buying implements Comparable<Buying> {
                   String companyName, int date, int month, int year) {
         this.numberOfShares = numberOfShares;
         this.sharesBuyingPrice = sharesBuyingPrice;
-        this.companyName = companyName;
+        this.companyName = companyName.toUpperCase();
         this.setStringDate(date, month, year);
     }
 
@@ -44,7 +44,7 @@ public class Buying implements Comparable<Buying> {
         // company name
         dataLine = dataLine.substring(q + 1);
         q = dataLine.indexOf(',');
-        this.companyName = dataLine.substring(0, q).trim();
+        this.companyName = dataLine.substring(0, q).trim().toUpperCase();
 
         // date
         dataLine = dataLine.substring(q + 1);

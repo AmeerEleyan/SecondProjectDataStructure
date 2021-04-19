@@ -18,8 +18,6 @@ public final class Utilities {
 
     public static LinkedStacks<Buying> buyingStacks = new LinkedStacks<>();
     public static LinkedQueues<Buying> buyingQueues = new LinkedQueues<>();
-    public static LinkedStacks<Buying> tempBuyingStacks;
-    public static LinkedQueues<Buying> tempBuyingQueue;
     public static LinkedList<DailyPrice> dailyPriceLinkedList = new LinkedList<>();
     public static float totalCapital = 0;
     public static String report = "";
@@ -84,9 +82,7 @@ public final class Utilities {
         /* To check the entered number of shares, that it consists of
            only digits
          */
-        if (number.matches("\\d+") && Integer.parseInt(number) > 0)
-            return true;
-        return false;
+        return (number.matches("\\d+") && Integer.parseInt(number) > 0);
     }
 
     /**

@@ -207,7 +207,7 @@ public class SellingGUI {
 
         Node<Buying> first = Utilities.buyingQueues.getFirst();
         float total = 0;
-        Utilities.tempBuyingQueue = new LinkedQueues<>();
+        LinkedQueues<Buying> tempBuyingQueue = new LinkedQueues<>();
         float dailyPrice = searchCompany.getSharesSalePrice();
         String details = "";
         boolean flag = true;
@@ -251,14 +251,14 @@ public class SellingGUI {
                 }
 
             } else if (numberOfShares > 0) {
-                Utilities.tempBuyingQueue.enqueue(Utilities.buyingQueues.dequeue());
+                tempBuyingQueue.enqueue(Utilities.buyingQueues.dequeue());
                 first = Utilities.buyingQueues.getFirst();
             } else break;
 
         }
-        if (!Utilities.tempBuyingQueue.isEmpty()) { // I haven't enqueued any item to tempBuying
-            Utilities.tempBuyingQueue.merge(Utilities.buyingQueues);
-            Utilities.buyingQueues = Utilities.tempBuyingQueue;
+        if (!tempBuyingQueue.isEmpty()) { // I haven't enqueued any item to tempBuying
+            tempBuyingQueue.merge(Utilities.buyingQueues);
+            Utilities.buyingQueues = tempBuyingQueue;
         }
 
         if (flag) { // there are no shares from specific company
@@ -278,7 +278,7 @@ public class SellingGUI {
             Utilities.totalCapital += total;
             Utilities.report += details + "\n______________________________________________\n";
             Utilities.buyingStacks.fillFromQueue(Utilities.buyingQueues.getFirst());
-            Interfaces.updateTable(Utilities.buyingQueues);
+            MainInterface.updateTable(Utilities.buyingQueues);
             Details.viewDetails(details);
             if (numberOfShares > 0)
                 Message.displayMassage("Warning", " You do not have enough shares to sell.\n So there are " + numberOfShares + " shares not sold ");
@@ -292,7 +292,7 @@ public class SellingGUI {
     private static void sellFromStacks(DailyPrice searchCompany, int numberOfShares) {
         Node<Buying> first = Utilities.buyingStacks.getTopItem();
         float total = 0;
-        Utilities.tempBuyingStacks = new LinkedStacks<>();
+        LinkedStacks<Buying> tempBuyingStacks = new LinkedStacks<>();
         float dailyPrice = searchCompany.getSharesSalePrice();
         String details = "";
         boolean flag = true;
@@ -334,13 +334,13 @@ public class SellingGUI {
                     break;
                 }
             } else if (numberOfShares > 0) {
-                Utilities.tempBuyingStacks.push(Utilities.buyingStacks.pop());
+                tempBuyingStacks.push(Utilities.buyingStacks.pop());
                 first = Utilities.buyingStacks.getTopItem();
             } else break;
 
         }
 
-        Utilities.buyingStacks.append(Utilities.tempBuyingStacks.getTopItem());
+        Utilities.buyingStacks.append(tempBuyingStacks.getTopItem());
 
         if (flag) {
             Message.displayMassage("Warning", (" You don't have shares from ") + (searchCompany.getCompanyName()) +
@@ -360,7 +360,7 @@ public class SellingGUI {
             Utilities.totalCapital += total;
             Utilities.report += details + "\n______________________________________________\n";
             Utilities.buyingQueues.fillFromStacks(Utilities.buyingStacks.getTopItem());
-            Interfaces.updateTable(Utilities.buyingQueues);
+            MainInterface.updateTable(Utilities.buyingQueues);
             Details.viewDetails(details);
             if (numberOfShares > 0)
                 Message.displayMassage("Warning", " You do not have enough shares to sell.\n So there are " + numberOfShares + " shares not sold ");

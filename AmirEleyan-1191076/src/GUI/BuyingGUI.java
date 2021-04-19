@@ -146,7 +146,7 @@ public class BuyingGUI {
                 Utilities.buyingQueues.enqueue(buying);
                 Utilities.buyingStacks.push(buying);
 
-                Interfaces.updateTable(Utilities.buyingQueues);
+                MainInterface.updateTable(Utilities.buyingQueues);
 
                 Message.displayMassage("Success", (txtNumberOfShares.getText().trim() +
                         " shares of " + chxCompanyName.getValue() + " Company were purchased successfully "));

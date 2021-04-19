@@ -83,14 +83,22 @@ public class NewCompany {
         btAdd.setOnMouseExited(e -> btAdd.setStyle(styleBt));
 
         btAdd.setOnAction(e -> {
-            if (!txtDailyPrice.getText().trim().isEmpty() && !txtCompanyN.getText().trim().isEmpty()) {
-                if (Utilities.isCompanyName(txtCompanyN.getText().trim())) {
+            if (!txtDailyPrice.getText().trim().isEmpty() && !txtCompanyN.getText().trim().isEmpty()) { // texts is empty
+                if (Utilities.isCompanyName(txtCompanyN.getText().trim())) { // check if company name is valid
 
-                    if (Utilities.isDailyPrice(txtDailyPrice.getText().trim())) {
-                        float dailyPrice = Float.parseFloat(txtDailyPrice.getText());
-                        Utilities.dailyPriceLinkedList.insertAtLast(new DailyPrice(txtCompanyN.getText(), dailyPrice));
-                        Interfaces.updateTable(Utilities.dailyPriceLinkedList);
-                        Message.displayMassage("Success", " Company " + txtCompanyN.getText().trim() + " has been added successfully ");
+                    if (Utilities.isDailyPrice(txtDailyPrice.getText().trim())) { // check if daily price is valid
+                        // new company does not exist
+                        if (Utilities.dailyPriceLinkedList.search(new DailyPrice(txtCompanyN.getText().trim().toUpperCase(), 0.0F)) == null) {
+
+                            float dailyPrice = Float.parseFloat(txtDailyPrice.getText().trim());
+                            Utilities.dailyPriceLinkedList.insertAtLast(new DailyPrice(txtCompanyN.getText().toUpperCase(), dailyPrice));
+                            MainInterface.updateTable(Utilities.dailyPriceLinkedList);
+                            Message.displayMassage("Success", " Company " + txtCompanyN.getText().trim() + " has been added successfully ");
+                            txtDailyPrice.clear();
+
+                        } else {  // new company is exist
+                            Message.displayMassage("Warning", " " + txtCompanyN.getText().trim() + " is already exist ");
+                        }
                         txtCompanyN.clear();
                     } else {
                         Message.displayMassage("Warning", " The daily price is invalid ");

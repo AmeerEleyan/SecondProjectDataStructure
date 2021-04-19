@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import lists.LinkedList;
 import lists.Node;
 
-public class Interfaces extends Application {
+public class MainInterface extends Application {
     private static TextField txtTotalShares, txtTotalCompany;
     private Label lblTotalShares, lblTotalCompany;
     private Button btBuy, btSell, btReport, btNewCompany;
@@ -37,7 +37,7 @@ public class Interfaces extends Application {
         stage.setTitle("Shares");
         stage.setResizable(false);
         Utilities.readPurchaseDataFromAFile("dailyPrice.txt", Utilities.dailyPriceLinkedList);
-        Utilities.readPurchaseDataFromAFile("shares.txt", new Object());
+        Utilities.readPurchaseDataFromAFile("shares.txt", new Buying());
         stage.setScene(new Scene(allComponents()));
         updateTable(Utilities.buyingQueues);
         updateTable(Utilities.dailyPriceLinkedList);
@@ -239,13 +239,15 @@ public class Interfaces extends Application {
         return vBox;
     }
 
+    // all buttons and functions
     public VBox functions() {
+
         VBox vBox = new VBox(25);
         vBox.setPadding(new Insets(5, 5, 5, 5));
         vBox.setAlignment(Pos.CENTER);
         vBox.setStyle("-fx-background-color: #ffffff");
 
-
+        // button for buy new shares
         btBuy = new Button("Buy Shares");
         btBuy.setMinWidth(275);
         btBuy.setMinHeight(40);
@@ -261,6 +263,7 @@ public class Interfaces extends Application {
             BuyingGUI.Buy(Utilities.dailyPriceLinkedList);
         });
 
+        // button for display capital
         btReport = new Button("Report");
         btReport.setMinWidth(275);
         btReport.setMinHeight(40);
@@ -274,11 +277,11 @@ public class Interfaces extends Application {
         btReport.setOnAction(e -> {
             if (!Utilities.report.isEmpty()) {
                 String res;
-                if (Utilities.totalCapital < 0) {
+                if (Utilities.totalCapital < 0) {// loos
                     res = " you lost " + (Utilities.totalCapital * -1);
-                } else if (Utilities.totalCapital > 0) {
+                } else if (Utilities.totalCapital > 0) {// earned
                     res = " you earned " + Utilities.totalCapital;
-                } else {
+                } else {//  same capital
                     res = "" + Utilities.totalCapital;
                 }
 
@@ -289,6 +292,7 @@ public class Interfaces extends Application {
 
         });
 
+        // button for sell current shares
         btSell = new Button("Sell Shares");
         btSell.setMinWidth(275);
         btSell.setMinHeight(40);
@@ -299,8 +303,9 @@ public class Interfaces extends Application {
         btSell.setOnMouseExited(e -> {
             btSell.setStyle(styleBt);
         });
-        btSell.setOnAction(e -> GUI.SellingGUI.Sell(Utilities.dailyPriceLinkedList));
+        btSell.setOnAction(e -> SellingGUI.Sell(Utilities.dailyPriceLinkedList));
 
+        // button for add new company
         btNewCompany = new Button("New company");
         btNewCompany.setMinWidth(275);
         btNewCompany.setMinHeight(40);
@@ -313,15 +318,12 @@ public class Interfaces extends Application {
         });
         btNewCompany.setOnAction(e -> NewCompany.addNewCompany());
 
-
-        //    vBox.setMargin(btBuy, new Insets(45, 0, 0, 0));
-
         vBox.getChildren().addAll(btBuy, btSell, btReport, btNewCompany);
-
-
+        
         return vBox;
     }
 
+    // display all components
     public BorderPane allComponents() {
         BorderPane pane = new BorderPane();
         pane.setPadding(new Insets(10, 10, 10, 10));
