@@ -1,3 +1,8 @@
+/**
+ * @author: Amir Eleyan
+ * ID: 1191076
+ * At: 19/4/2021  11:45 AM
+ */
 package GUI;
 
 import Shares.Buying;
@@ -36,11 +41,18 @@ public class MainInterface extends Application {
     public void start(Stage stage) throws Exception {
         stage.setTitle("Shares");
         stage.setResizable(false);
+
+        // upload date
         Utilities.readPurchaseDataFromAFile("dailyPrice.txt", Utilities.dailyPriceLinkedList);
         Utilities.readPurchaseDataFromAFile("shares.txt", new Buying());
+
         stage.setScene(new Scene(allComponents()));
+
+        // set date in the table
         updateTable(Utilities.buyingQueues);
         updateTable(Utilities.dailyPriceLinkedList);
+
+        // update files when close program
         stage.setOnCloseRequest(e -> {
             FileUpdate.update("shares.txt", Utilities.buyingQueues);
             FileUpdate.update("dailyPrice.txt", Utilities.dailyPriceLinkedList);
@@ -319,7 +331,7 @@ public class MainInterface extends Application {
         btNewCompany.setOnAction(e -> NewCompany.addNewCompany());
 
         vBox.getChildren().addAll(btBuy, btSell, btReport, btNewCompany);
-        
+
         return vBox;
     }
 
