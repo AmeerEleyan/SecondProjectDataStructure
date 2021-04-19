@@ -221,22 +221,28 @@ public class SellingGUI {
 
             if (companyN.equals(searchCompany.getCompanyName())) {
                 if (numberOfShares >= sharesBuying) {
+
                     first = first.getNext();
                     Utilities.buyingQueues.dequeue();
+
                     float temp = (sharesBuying * (dailyPrice - priceBuying));
+
                     if (temp < 0) {//loss
                         details += loss(temp * -1, strDate, companyN);
                     } else if (temp == 0) { // no change on the capital
-                        details += sameCapital(numberOfShares, strDate, companyN);
+                        details += sameCapital(sharesBuying, strDate, companyN);
                     } else {// earned
                         details += earned(temp, strDate, companyN);
                     }
+
                     numberOfShares = numberOfShares - sharesBuying;
                     total += temp;
                     flag = false;
                 } else {
+
                     first.getData().setNumberOfShares(sharesBuying - numberOfShares);
                     float temp = (numberOfShares * (dailyPrice - priceBuying));
+
                     if (temp < 0) {//loss
                         details += loss(temp * -1, strDate, companyN);
                     } else if (temp == 0) { // no change on the capital
@@ -253,9 +259,11 @@ public class SellingGUI {
             } else if (numberOfShares > 0) {
                 tempBuyingQueue.enqueue(Utilities.buyingQueues.dequeue());
                 first = Utilities.buyingQueues.getFirst();
-            } else break;
+            } else
+                break;
 
-        }
+        }//end while
+
         if (!tempBuyingQueue.isEmpty()) { // I haven't enqueued any item to tempBuying
             tempBuyingQueue.merge(Utilities.buyingQueues);
             Utilities.buyingQueues = tempBuyingQueue;
@@ -290,79 +298,98 @@ public class SellingGUI {
      * Sell shares from stacks
      */
     private static void sellFromStacks(DailyPrice searchCompany, int numberOfShares) {
-        Node<Buying> first = Utilities.buyingStacks.getTopItem();
-        float total = 0;
+        Node<Buying> current = Utilities.buyingStacks.getTopItem();
+        float totalCapital = 0;
         LinkedStacks<Buying> tempBuyingStacks = new LinkedStacks<>();
         float dailyPrice = searchCompany.getSharesSalePrice();
         String details = "";
-        boolean flag = true;
-        while (first != null) {
+        boolean flag = true;//to check if he bought shares from this company
 
-            int sharesBuying = first.getData().getNumberOfShares();
-            String companyN = first.getData().getCompanyName();
-            float priceBuying = first.getData().getSharesBuyingPrice();
-            String strDate = first.getData().getStringDate();
+        while (current != null) {
+            // current  = 130, x, 4.5, 15/4/2021
+            int sharesBuying = current.getData().getNumberOfShares();// 130
+            String companyN = current.getData().getCompanyName();// x
+            float priceBuying = current.getData().getSharesBuyingPrice();// 4.5
+            String strDate = current.getData().getStringDate();// 15/4/2021
 
             if (companyN.equals(searchCompany.getCompanyName())) {
+                // The number of shares required for sale is >= than the available shares in current node
                 if (numberOfShares >= sharesBuying) {
-                    first = first.getNext();
-                    Utilities.buyingStacks.pop();
-                    float temp = (sharesBuying * (dailyPrice - priceBuying));
-                    if (temp < 0) {//loss
-                        details += loss(temp * -1, strDate, companyN);
-                    } else if (temp == 0) { // no change on the capital
-                        details += sameCapital(numberOfShares, strDate, companyN);
+
+                    current = current.getNext();
+                    Utilities.buyingStacks.pop(); // sell shares in this node
+
+                    // calculate gain or lost
+                    float gain_lost = (sharesBuying * (dailyPrice - priceBuying));
+
+                    if (gain_lost < 0) {//loss
+                        details += loss(gain_lost * -1, strDate, companyN);
+                    } else if (gain_lost == 0) { // no change on the capital
+                        details += sameCapital(sharesBuying, strDate, companyN);
                     } else {// earned
-                        details += earned(temp, strDate, companyN);
+                        details += earned(gain_lost, strDate, companyN);
                     }
+
+                    // Reducing the number of shares required for sale
                     numberOfShares = numberOfShares - sharesBuying;
-                    total += temp;
+
+                    // add capital for this selling to the total capital in this movement
+                    totalCapital += gain_lost;
                     flag = false;
-                } else {
-                    first.getData().setNumberOfShares(sharesBuying - numberOfShares);
-                    float temp = (numberOfShares * (dailyPrice - priceBuying));
-                    if (temp < 0) {//loss
-                        details += loss(temp * -1, strDate, companyN);
-                    } else if (temp == 0) { // no change on the capital
+
+                } else { // The number of shares required for sale is less than the available shares
+
+                    current.getData().setNumberOfShares(sharesBuying - numberOfShares);// update data (# buying shares)
+                    float gain_lost = (numberOfShares * (dailyPrice - priceBuying));// calculate gain or lost
+
+                    if (gain_lost < 0) {//loss
+                        details += loss(gain_lost * -1, strDate, companyN);
+                    } else if (gain_lost == 0) { // no change on the capital
                         details += sameCapital(numberOfShares, strDate, companyN);
                     } else {// earned
-                        details += earned(temp, strDate, companyN);
+                        details += earned(gain_lost, strDate, companyN);
                     }
+
+                    // I sold all shares that required to sell 
                     numberOfShares = 0;
-                    total += temp;
+
+                    // add capital for this selling to the total capital in this movement
+                    totalCapital += gain_lost;
                     flag = false;
                     break;
                 }
-            } else if (numberOfShares > 0) {
+            } else if (numberOfShares > 0) { // There are still shares to be sold them
                 tempBuyingStacks.push(Utilities.buyingStacks.pop());
-                first = Utilities.buyingStacks.getTopItem();
-            } else break;
+                current = Utilities.buyingStacks.getTopItem();
+            } else
+                break;
 
-        }
+        }//end while
 
-        Utilities.buyingStacks.append(tempBuyingStacks.getTopItem());
+        Utilities.buyingStacks.append(tempBuyingStacks.getTopItem()); // update stacks
 
-        if (flag) {
+        if (flag) { // There are no shares that have been purchased from this company
             Message.displayMassage("Warning", (" You don't have shares from ") + (searchCompany.getCompanyName()) +
                     (" company to sell them.\n"));
         } else {
 
             details += "At " + Utilities.buyingDate(new Date()) + " Total capital: ";
 
-            if (total < 0) {
-                details += " you lost $ " + (total * -1);
-            } else if (total == 0) {
-                details += "" + total;
-            } else {
-                details += " you earned $ " + total;
+            if (totalCapital < 0) { // loss in this selling
+                details += " you lost $ " + (totalCapital * -1);
+            } else if (totalCapital == 0) { // no loss no earned
+                details += "" + totalCapital;
+            } else { // earned in this selling
+                details += " you earned $ " + totalCapital;
             }
 
-            Utilities.totalCapital += total;
+            Utilities.totalCapital += totalCapital;//Capital gains and losses
             Utilities.report += details + "\n______________________________________________\n";
-            Utilities.buyingQueues.fillFromStacks(Utilities.buyingStacks.getTopItem());
-            MainInterface.updateTable(Utilities.buyingQueues);
-            Details.viewDetails(details);
-            if (numberOfShares > 0)
+            Utilities.buyingQueues.fillFromStacks(Utilities.buyingStacks.getTopItem()); // update queue list depend on the stacks
+            MainInterface.updateTable(Utilities.buyingQueues);// update data in table view after sell
+            Details.viewDetails(details);// display details of this movement selling
+
+            if (numberOfShares > 0)// The number of shares required for sale is more than the available shares
                 Message.displayMassage("Warning", " You do not have enough shares to sell.\n So there are " + numberOfShares + " shares not sold ");
         }
         txtNumberOfShares.clear();
